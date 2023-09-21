@@ -8,7 +8,7 @@ import vercel from "@astrojs/vercel/static";
 // https://astro.build/config
 export default defineConfig({
   site: "https://astroship.web3templates.com",
-  output: "server",
+  output: "static",
   adapter: vercel(),
   integrations: [
     tailwind(),
