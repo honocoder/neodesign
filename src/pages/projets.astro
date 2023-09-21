@@ -6,34 +6,38 @@ import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 
 // Filter blog entries with 'draft: false' & date before current date
-const publishedBlogEntries = await getCollection("blog", ({ data }) => {
+const publishedProjects = await getCollection("projects", ({ data }) => {
   return !data.draft && data.publishDate < new Date();
 });
 
 // Sort content entries by publication date
-publishedBlogEntries.sort(function (a, b) {
+publishedProjects.sort(function (a, b) {
   return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
 });
 ---
 
-<Layout title="Blog">
+<Layout title="Projets">
   <Container>
     <Sectionhead>
-      <Fragment slot="title">Blog</Fragment>
+      <Fragment slot="title">Projets</Fragment>
       <Fragment slot="desc">
-        J'écris à propos de programmation, d'entrepreunariat et de tech.
+        Vous trouverez ici quelques projets sélectionnés pour vous faire une
+        idée de mon travail. N'oubliez pas que chaque projet est unique et que
+        je nous décidons ensemble de la meilleure solution pour votre projet,
+        tant au niveau du design que de la technique.
       </Fragment>
     </Sectionhead>
+
     <main class="mt-16">
       <ul class="grid gap-16 max-w-4xl mx-auto">
         {
-          publishedBlogEntries.map((blogPostEntry, index) => (
-            <li>
-              <a href={`/blog/${blogPostEntry.slug}`}>
+        publishedProjects.map((project, index) => (
+          <li>
+              <a href={`/projects/${project.slug}`}>
                 <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
                   <Picture
-                    src={blogPostEntry.data.image.src}
-                    alt={blogPostEntry.data.image.alt}
+                    src={project.data.image.src}
+                    alt={project.data.image.alt}
                     sizes="(max-width: 800px) 100vw, 800px"
                     widths={[200, 400, 800]}
                     aspectRatio="16:9"
@@ -46,31 +50,32 @@ publishedBlogEntries.sort(function (a, b) {
                   />
                   <div>
                     <span class="text-blue-400 uppercase tracking-wider text-sm font-medium">
-                      {blogPostEntry.data.category}
+                      {project.data.category}
                     </span>
 
                     <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 ">
-                      {blogPostEntry.data.title}
+                      {project.data.title}
                     </h2>
 
                     <div class="flex gap-2 mt-3">
                       <span class="text-gray-400">
-                        {blogPostEntry.data.author}
+                        {project.data.author}
                       </span>
                       <span class="text-gray-400">• </span>
                       <time
                         class="text-gray-400"
-                        datetime={blogPostEntry.data.publishDate.toISOString()}>
-                        {blogPostEntry.data.publishDate.toDateString()}
+                        datetime={project.data.publishDate.toISOString()}>
+                        {project.data.publishDate.toDateString()}
                       </time>
                     </div>
                   </div>
                 </div>
               </a>
             </li>
-          ))
+        ))
         }
       </ul>
     </main>
+
   </Container>
 </Layout>
