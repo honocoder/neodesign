@@ -5,12 +5,10 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 
-// Filter blog entries with 'draft: false' & date before current date
 const publishedProjects = await getCollection("projects", ({ data }) => {
   return !data.draft && data.publishDate < new Date();
 });
 
-// Sort content entries by publication date
 publishedProjects.sort(function (a, b) {
   return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
 });
@@ -31,8 +29,8 @@ publishedProjects.sort(function (a, b) {
     <main class="mt-16">
       <ul class="grid gap-16 max-w-4xl mx-auto">
         {
-        publishedProjects.map((project, index) => (
-          <li>
+          publishedProjects.map((project, index) => (
+            <li>
               <a href={`/projects/${project.slug}`}>
                 <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
                   <Picture
@@ -58,9 +56,7 @@ publishedProjects.sort(function (a, b) {
                     </h2>
 
                     <div class="flex gap-2 mt-3">
-                      <span class="text-gray-400">
-                        {project.data.author}
-                      </span>
+                      <span class="text-gray-400">{project.data.author}</span>
                       <span class="text-gray-400">• </span>
                       <time
                         class="text-gray-400"
@@ -72,10 +68,9 @@ publishedProjects.sort(function (a, b) {
                 </div>
               </a>
             </li>
-        ))
+          ))
         }
       </ul>
     </main>
-
   </Container>
 </Layout>

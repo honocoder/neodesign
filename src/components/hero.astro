@@ -1,6 +1,6 @@
 ---
 import { Picture } from "@astrojs/image/components";
-import heroImage from "assets/hero.png";
+import heroImage from "assets/programmer.svg";
 import Link from "@components/ui/link.astro";
 import { Icon } from "astro-icon";
 ---
@@ -10,18 +10,17 @@ import { Icon } from "astro-icon";
   <div class="py-6 md:order-1 hidden md:block">
     <Picture
       src={heroImage}
-      alt="Astronaut in the air"
+      alt="Programmer"
       widths={[200, 400, 600]}
-      aspectRatio="4:3"
       sizes="(max-width: 800px) 100vw, 620px"
       loading="eager"
-      format="avif"
+      format="webp"
     />
   </div>
   <div>
     <h1
       class="text-5xl lg:text-6xl xl:text-7xl font-bold lg:tracking-tight xl:tracking-tighter">
-      La meilleure façon de réaliser vos projets 🚀.
+      La meilleure façon de réaliser vos projets 🚀
     </h1>
     <p class="text-lg mt-4 text-slate-600 max-w-xl">
       NeoDesign vous accompagne dans la réalisation de vos projets web et
@@ -30,7 +29,6 @@ import { Icon } from "astro-icon";
       agence : c'est ça la NeoDesign Touch !
     </p>
     <div class="mt-6 flex flex-col sm:flex-row gap-3">
-
       <Link
         href="#"
         href="/contact"
