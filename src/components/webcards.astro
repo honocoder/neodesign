@@ -7,34 +7,36 @@ const webCards = await getCollection("web", ({ data }) => {
 });
 ---
 
-<div class="grid md:grid-cols-3 gap-10 mx-auto max-w-4xl mt-24">
-  <h2 class="col-span-3 font-bold text-3xl text-gray-800">
+<div class="mx-auto max-w-4xl mt-24">
+  <h2 class="font-bold text-3xl text-gray-800 mb-12">
     Mais c'est quoi la différence ?
   </h2>
-  {
-    webCards.map((webEntry) => (
-      <div class="group">
-        <div class="w-full aspect-square">
-          <Picture
-            src={webEntry.data.avatar.src}
-            alt={webEntry.data.avatar.alt}
-            sizes="(max-width: 800px) 100vw, 400px"
-            widths={[200, 400]}
-            aspectRatio="1:1"
-            background="#ffffff"
-            fit="cover"
-            position="center"
-            class="w-full rounded-md transition group-hover:-translate-y-1 group-hover:shadow-xl"
-          />
-        </div>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+    {
+      webCards.map((webEntry) => (
+        <div class="group">
+          <div class="w-full aspect-square">
+            <Picture
+              src={webEntry.data.avatar.src}
+              alt={webEntry.data.avatar.alt}
+              sizes="(max-width: 800px) 100vw, 400px"
+              widths={[200, 400]}
+              aspectRatio="1:1"
+              background="#ffffff"
+              fit="cover"
+              position="center"
+              class="w-full rounded-md transition group-hover:-translate-y-1 group-hover:shadow-xl"
+            />
+          </div>
 
-        <div class="mt-4 text-center">
-          <h2 class="text-lg text-gray-800">{webEntry.data.title}</h2>
-          <h3 class="text-sm text-slate-500 text-justify">
-            {webEntry.data.description}
-          </h3>
+          <div class="mt-4 text-center">
+            <h2 class="text-lg text-gray-800">{webEntry.data.title}</h2>
+            <h3 class="text-sm text-slate-500 text-justify">
+              {webEntry.data.description}
+            </h3>
+          </div>
         </div>
-      </div>
-    ))
-  }
+      ))
+    }
+  </div>
 </div>
