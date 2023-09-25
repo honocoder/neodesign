@@ -3,6 +3,12 @@ import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Cta from "@components/cta.astro";
+import { Picture } from "@astrojs/image/components";
+
+import MobileDev1 from "@assets/mobile-dev/mobile-dev-1.jpg";
+import MobileDev2 from "@assets/mobile-dev/mobile-dev-2.jpg";
+import MobileDev3 from "@assets/mobile-dev/mobile-dev-3.jpg";
+import MobileDev4 from "@assets/mobile-dev/mobile-dev-4.jpg";
 ---
 
 <Layout title="Développement mobile">
@@ -26,6 +32,17 @@ import Cta from "@components/cta.astro";
     </Sectionhead>
 
     <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <Picture
+        src={MobileDev1}
+        alt="Mobile development"
+        sizes="(max-width: 800px) 400px, 400px"
+        widths={[200, 400]}
+        aspectRatio="1:1"
+        background="#ffffff"
+        fit="cover"
+        position="center"
+        class="mx-auto"
+      />
       <h2 class="font-bold text-3xl text-gray-800">
         Développement d'applications mobiles
       </h2>
@@ -48,6 +65,17 @@ import Cta from "@components/cta.astro";
         intuitive, permettant aux utilisateurs d'accéder à des services ou des
         informations de manière rapide et efficace, où qu'ils se trouvent.
         <br /><br />
+        <Picture
+          src={MobileDev2}
+          alt="Mobile development"
+          sizes="(max-width: 800px) 400px, 400px"
+          widths={[200, 400]}
+          aspectRatio="1:1"
+          background="#ffffff"
+          fit="cover"
+          position="center"
+          class="mx-auto mb-12"
+        />
         <b>Et pourquoi opter pour une app ?</b>
         <br />
         L’utilisation d’une application mobile peut offrir un avantage concurrentiel
@@ -58,7 +86,7 @@ import Cta from "@components/cta.astro";
 
       <ul>
         <li class="mb-6">
-          <b>1 - Accès direct et contant</b>
+          <b>1 - Accès direct et constant</b>
           <p>
             Les applications mobiles offrent un accès immédiat aux services et
             produits de l'entreprise, renforçant la relation client et
@@ -98,6 +126,17 @@ import Cta from "@components/cta.astro";
           </p>
         </li>
       </ul>
+      <Picture
+        src={MobileDev4}
+        alt="Mobile development"
+        sizes="(max-width: 800px) 400px, 400px"
+        widths={[200, 400]}
+        aspectRatio="1:1"
+        background="#ffffff"
+        fit="cover"
+        position="center"
+        class="mx-auto"
+      />
     </div>
 
     <Cta />
