@@ -41,6 +41,7 @@ const projectCollection = defineCollection({
       alt: z.string(),
     }),
     publishDate: z.string().transform((str) => new Date(str)),
+    // publishDate: z.string(),
     author: z.string().default("Astroship"),
     category: z.string(),
     tags: z.array(z.string()),

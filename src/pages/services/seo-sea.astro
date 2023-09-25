@@ -1,0 +1,68 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import Cta from "@components/cta.astro";
+---
+
+<Layout title="Référencement">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">Référencement</Fragment>
+      <Fragment slot="desc">
+        Quand on veut développer l'image de son entreprise sur internet, la
+        première étape est d'<span class="font-bold underline"
+          ><a href="/services/web-dev">avoir un site internet</a></span
+        >.<br />
+        Mais ce n'est pas suffisant. Il faut également que vos clients potentiels
+        vous trouvent.<br />
+        C'est là qu'intervient le référencement. Qu'il soit naturel ou payant, le
+        travail sur le référencement est indispensable pour que votre site soit visible
+        sur les moteurs de recherche. Il consiste à optimiser votre site pour qu'il
+        soit bien compris par les moteurs de recherche, et à mettre en place des
+        campagnes de publicité ciblées.
+      </Fragment>
+    </Sectionhead>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">
+        SEO - référencement naturel
+      </h2>
+      <p class="text-lg leading-relaxed text-slate-500 mb-12">
+        L'optimisation pour les moteurs de recherche (SEO) est la pierre
+        angulaire d'une présence en ligne fructueuse. En tant que développeur
+        web expérimenté, je m'efforce de créer des sites web qui non seulement
+        impressionnent visuellement, mais qui sont également conçus avec une
+        architecture solide et un code propre, favorisant ainsi un classement
+        optimal sur les moteurs de recherche. Mon approche du SEO repose sur une
+        compréhension approfondie des algorithmes de recherche en constante
+        évolution, ainsi que sur des techniques éprouvées telles que
+        l'optimisation des balises, la vitesse de chargement et la structure de
+        l'URL. Ensemble, nous maximiserons la visibilité de votre site et
+        attirerons un trafic qualifié, propulsant ainsi votre entreprise vers de
+        nouveaux sommets.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">
+        SEA - campagnes de référencement payant
+      </h2>
+      <p class="text-lg leading-relaxed text-slate-500 mb-12">
+        En complément du SEO, le référencement payant (SEA) est un levier
+        puissant pour booster rapidement votre visibilité en ligne. En tant que
+        développeur web et expert en publicité en ligne, je suis en mesure de
+        mettre en place des campagnes efficaces sur des plateformes telles que
+        Google Ads, garantissant ainsi une présence stratégique devant les
+        utilisateurs recherchant activement vos produits ou services. Ma
+        démarche dans le SEA est axée sur l'analyse approfondie des mots-clés,
+        la création de publicités percutantes et la gestion proactive des
+        campagnes pour optimiser votre retour sur investissement. Ensemble, nous
+        mettrons en place une stratégie SEA sur mesure qui générera des
+        résultats tangibles pour votre entreprise.
+      </p>
+    </div>
+
+    <Cta />
+  </Container>
+</Layout>

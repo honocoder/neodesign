@@ -1,0 +1,76 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Container from "@components/container.astro";
+import Sectionhead from "@components/sectionhead.astro";
+import Cta from "@components/cta.astro";
+import { Picture } from "@astrojs/image/components";
+
+import FanHypnose from "@assets/graphisme/logo-fanhypnose.png";
+import Trotinette from "@assets/graphisme/logo-colette-trottinette.png";
+---
+
+<Layout title="Graphisme">
+  <Container>
+    <Sectionhead>
+      <Fragment slot="title">Graphisme</Fragment>
+      <Fragment slot="desc">
+        En tant que développeur web, je ne crée pas seulement des sites web
+        fonctionnels, je donne également vie à des identités visuelles
+        captivantes. Le graphisme est l'art de raconter une histoire à travers
+        des visuels, et c'est exactement ce que je m'efforce d'accomplir avec
+        chaque projet.
+      </Fragment>
+    </Sectionhead>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">Conception de logos</h2>
+      <p class="text-lg leading-relaxed text-slate-500 mb-12">
+        Un logo, c'est bien plus qu'une simple image. C'est le reflet de l'âme
+        de votre entreprise. Vous et moi, nous travaillons ensemble pour créer
+        un logo qui vous ressemble, et qui correspond à l'image que vous
+        souhaitez donner de votre entreprise.
+      </p>
+      <div class="flex gap-10 mb-24">
+        <Picture
+          src={FanHypnose}
+          alt="Logo FanHypnose"
+          sizes="(max-width: 800px) 400px, 400px"
+          widths={[200, 400]}
+          aspectRatio="1:1"
+          background="#ffffff"
+          fit="cover"
+          position="center"
+          class="mx-auto"
+        />
+        <Picture
+          src={Trotinette}
+          alt="Logo FanHypnose"
+          sizes="(max-width: 800px) 400px, 400px"
+          widths={[200, 400]}
+          aspectRatio="1:1"
+          background="#ffffff"
+          fit="cover"
+          position="center"
+          class="mx-auto"
+        />
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
+      <h2 class="font-bold text-3xl text-gray-800">Identité visuelle</h2>
+      <p class="text-lg leading-relaxed text-slate-500">
+        L'identité visuelle est l'ADN de votre entreprise. Elle englobe tout, de
+        la palette de couleurs aux typographies, en passant par le style
+        graphique. Je m'engage à créer une identité visuelle qui renforce votre
+        positionnement sur le marché et offre une expérience visuelle cohérente
+        à vos clients.
+        <br />
+        Je me sers d'outils modernes comme Photoshop, Illustrator et Figma, et je
+        peux également faire appel à l'intelligence artificielle au besoin pour générer
+        des visuels rapidement et sur mesure.
+      </p>
+    </div>
+
+    <Cta />
+  </Container>
+</Layout>

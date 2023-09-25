@@ -12,6 +12,8 @@ const publishedProjects = await getCollection("projects", ({ data }) => {
 publishedProjects.sort(function (a, b) {
   return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
 });
+
+import { getFormattedDate } from "@utils/all";
 ---
 
 <Layout title="Projets">
@@ -56,12 +58,8 @@ publishedProjects.sort(function (a, b) {
                     </h2>
 
                     <div class="flex gap-2 mt-3">
-                      <span class="text-gray-400">{project.data.author}</span>
-                      <span class="text-gray-400">• </span>
-                      <time
-                        class="text-gray-400"
-                        datetime={project.data.publishDate.toISOString()}>
-                        {project.data.publishDate.toDateString()}
+                      <time class="text-gray-400">
+                        {getFormattedDate(project.data.publishDate)}
                       </time>
                     </div>
                   </div>
