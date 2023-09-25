@@ -1,16 +1,10 @@
 ---
-import { getCollection } from "astro:content";
-import { Picture } from "@astrojs/image/components";
 import Layout from "@layouts/Layout.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 
 import Cta from "@components/cta.astro";
-
-// Filter team entries with 'draft: false' & date before current date
-const webCards = await getCollection("web", ({ data }) => {
-  return !data.draft && data.publishDate < new Date();
-});
+import Webcards from "@components/webcards.astro";
 ---
 
 <Layout title="Développement web">
@@ -39,37 +33,7 @@ const webCards = await getCollection("web", ({ data }) => {
       </p>
     </div>
 
-    <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-4xl mt-24">
-      <h2 class="col-span-3 font-bold text-3xl text-gray-800">
-        Mais c'est quoi la différence ?
-      </h2>
-      {
-        webCards.map((webEntry) => (
-          <div class="group">
-            <div class="w-full aspect-square">
-              <Picture
-                src={webEntry.data.avatar.src}
-                alt={webEntry.data.avatar.alt}
-                sizes="(max-width: 800px) 100vw, 400px"
-                widths={[200, 400]}
-                aspectRatio="1:1"
-                background="#ffffff"
-                fit="cover"
-                position="center"
-                class="w-full rounded-md transition group-hover:-translate-y-1 group-hover:shadow-xl"
-              />
-            </div>
-
-            <div class="mt-4 text-center">
-              <h2 class="text-lg text-gray-800">{webEntry.data.title}</h2>
-              <h3 class="text-sm text-slate-500">
-                {webEntry.data.description}
-              </h3>
-            </div>
-          </div>
-        ))
-      }
-    </div>
+    <Webcards />
     <Cta />
   </Container>
 </Layout>
