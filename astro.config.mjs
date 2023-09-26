@@ -8,7 +8,11 @@ import vercel from "@astrojs/vercel/static";
 export default defineConfig({
   site: "https://astroship.web3templates.com",
   output: "static",
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+  }),
   integrations: [
     tailwind(),
     image({
