@@ -3,11 +3,11 @@ import tailwind from "@astrojs/tailwind";
 import image from "@astrojs/image";
 import mdx from "@astrojs/mdx";
 // import sitemap from "@astrojs/sitemap";
-import vercel from "@astrojs/vercel/static";
+import vercel from "@astrojs/vercel/serverless";
 
 export default defineConfig({
   site: "https://astroship.web3templates.com",
-  output: "static",
+  output: "server",
   adapter: vercel({
     webAnalytics: {
       enabled: true,
