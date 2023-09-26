@@ -6,6 +6,10 @@ import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
 
 const menuitems = [
   {
+    title: "Accueil",
+    path: "/",
+  },
+  {
     title: "Services",
     path: "/services",
     children: [
@@ -35,8 +39,9 @@ const menuitems = [
 ];
 ---
 
-<Container>
-  <header class="flex flex-col lg:flex-row justify-between items-center my-5">
+<Container class="sticky top-0 bg-white z-50 p-1">
+  <header
+    class="sticky top-0 z-50 bg-white flex flex-col lg:flex-row justify-between items-center my-5">
     <Astronav>
       <div class="flex w-full lg:w-auto items-center justify-between">
         <a href="/" class="text-lg"
