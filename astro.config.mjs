@@ -9,7 +9,9 @@ export default defineConfig({
   site: "https://agenceneodesign.com",
   output: "static",
   adapter: vercel({
-    webAnalytics: true,
+    webAnalytics: {
+      enabled: true,
+    },
   }),
   integrations: [
     tailwind(),
