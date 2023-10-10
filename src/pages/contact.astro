@@ -1,5 +1,5 @@
 ---
-import Contactform from "@components/contactform.astro";
+import Contactform2 from "@components/contactform2.astro";
 import Container from "@components/container.astro";
 import Sectionhead from "@components/sectionhead.astro";
 import Layout from "@layouts/Layout.astro";
@@ -13,7 +13,7 @@ import { Icon } from "astro-icon";
       <Fragment slot="desc">On travaille ensemble ?</Fragment>
     </Sectionhead>
 
-    <div class="grid md:grid-cols-2 gap-10 mx-auto max-w-4xl mt-16">
+    <div class="mx-auto max-w-4xl mt-16">
       <div>
         <h2 class="font-medium text-2xl text-gray-800">Contacter NeoDesign</h2>
         <p class="text-lg leading-relaxed text-slate-500 mt-3">
@@ -35,10 +35,10 @@ import { Icon } from "astro-icon";
               href="tel:+33782732279">07 82 73 22 79</a
             >
           </div>
+          <div class="mt-16">
+            <Contactform2 />
+          </div>
         </div>
-      </div>
-      <div>
-        <Contactform />
       </div>
     </div>
   </Container>
