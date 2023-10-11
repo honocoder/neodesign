@@ -2,6 +2,7 @@
 import { SEO } from "astro-seo";
 import Footer from "@components/footer.astro";
 import Navbar from "@components/navbar/navbar.astro";
+import { ViewTransitions } from "astro:transitions";
 import "@fontsource-variable/inter/index.css";
 
 export interface Props {
@@ -30,6 +31,7 @@ const makeTitle = title
     <link rel="icon" type="image/png+xml" href="/favicon.ico" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
+    <ViewTransitions fallback="none" />
 
     <!-- <link rel="preload" as="image" href={src} alt="Hero" /> -->
     <SEO

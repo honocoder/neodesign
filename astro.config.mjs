@@ -13,6 +13,9 @@ export default defineConfig({
       enabled: true,
     },
   }),
+  experimental: {
+    viewTransitions: true,
+  },
   integrations: [
     tailwind(),
     image({
