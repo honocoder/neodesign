@@ -38,7 +38,7 @@ export const offers = [
     unit: "/mois",
     cadence: "",
     summary:
-      "Trois forfaits, de 60 à 100 € par mois : le site reste à jour, sauvegardé, surveillé, et peut évoluer.",
+      "Essentiel 60 €, Sérénité 120 €, Pro 240 € par mois. Mises à jour, sécurité, surveillance et sauvegardes.",
   },
   {
     id: "automatisation",
@@ -106,25 +106,44 @@ export const maintenanceTiers = [
     name: "Essentiel",
     price: "60\u202f€",
     unit: "/mois",
-    points: ["Mises à jour du site", "Sauvegardes", "Surveillance de la disponibilité"],
+    points: [
+      "Mises à jour",
+      "Sécurité",
+      "Surveillance de disponibilité",
+      "Sauvegardes hebdomadaires",
+      "Pas de temps de modification inclus",
+      "Prise en charge sous 72 h ouvrées",
+    ],
   },
   {
     name: "Sérénité",
-    price: "80\u202f€",
-    unit: "/mois",
-    points: ["Tout l'Essentiel", "2 h de modifications sur le site par mois"],
-  },
-  {
-    name: "Pro",
-    price: "100\u202f€",
+    price: "120\u202f€",
     unit: "/mois",
     points: [
       "Tout l'Essentiel",
-      "5 h de mon temps par mois, pour le site ou au-delà",
-      "Plus réactif",
-      "Priorité de prise en charge",
+      "1 h de modifications par mois, non cumulable",
+      "Petit bilan mensuel",
+      "Prise en charge sous 48 h ouvrées",
     ],
   },
+  {
+    name: "Pro",
+    price: "240\u202f€",
+    unit: "/mois",
+    points: [
+      "Tout l'Essentiel",
+      "Sauvegardes quotidiennes",
+      "3 h par mois, non cumulables, sur le site ou les automatisations",
+      "Prise en charge prioritaire sous 24 h ouvrées",
+      "Point trimestriel de 30 min",
+    ],
+  },
+] as const;
+
+export const maintenanceNotes = [
+  "Temps supplémentaire hors forfait : 70\u202f€/h.",
+  "Engagement minimum de 3 mois.",
+  "Pour un site non réalisé par NeoDesign, audit de reprise à 150\u202f€ avant souscription.",
 ] as const;
 
 export const mobileService = {

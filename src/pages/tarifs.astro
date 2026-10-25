@@ -4,6 +4,7 @@ import PageHero from "@components/PageHero.astro";
 import Close from "@components/Close.astro";
 import {
   getOffer,
+  maintenanceNotes,
   maintenanceTiers,
   offers,
   priceLabel,
@@ -19,7 +20,7 @@ const conseil = getOffer("conseil");
 
 <Base
   title="Tarifs | NeoDesign"
-  description="Sites web à partir de 1 200 €, maintenance à partir de 60 € par mois, automatisation à partir de 500 €, conseil à partir de 250 € la demi-journée. Prix finaux, TVA non applicable."
+  description="Sites web à partir de 1 200 €. Maintenance à partir de 60 € par mois : Essentiel 60 €, Sérénité 120 €, Pro 240 €. Automatisation à partir de 500 €, conseil à partir de 250 € la demi-journée. Prix finaux, TVA non applicable."
 >
   <PageHero
     eyebrow="Tarifs"
@@ -70,9 +71,10 @@ const conseil = getOffer("conseil");
             ))
           }
         </div>
-        <p class="note">
-          Les 2 h de Sérénité portent sur le site. Les 5 h du forfait Pro peuvent servir au site, à un outil ou à une automatisation.
-        </p>
+        <ul class="checklist">
+          {maintenanceNotes.map((note) => <li>{note}</li>)}
+        </ul>
+        <p class="note">Prix finaux. TVA non applicable, art. 293 B du CGI.</p>
         <div class="actions">
           <a class="btn" href={maintenance.contact}>Je veux un devis</a>
         </div>
