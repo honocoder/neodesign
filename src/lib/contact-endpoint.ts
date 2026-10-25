@@ -3,7 +3,7 @@ import { createRateLimiter, type RateLimiter } from "./rate-limit.ts";
 import { site } from "./site.ts";
 
 const MAX_BODY = 12_000;
-const HEADER_NAME = /^[A-Za-z0-9-]{1,64}$/;
+const WEBHOOK_HEADER = "X-NeoDesign-Webhook-Token";
 const HEADER_VALUE = /^[\t\x20-\x7e]{1,512}$/;
 
 const ALLOWED_ORIGINS = new Set([
@@ -15,24 +15,23 @@ const unavailable =
   `Le formulaire est momentanément indisponible. Écrivez à ${site.email} ou appelez le ${site.phoneDisplay}.`;
 const upstreamError =
   `L'envoi n'a pas abouti. Écrivez à ${site.email} ou appelez le ${site.phoneDisplay}.`;
+const rejectedRequest =
+  "Le message n'a pas été accepté. Vérifiez les informations saisies, puis réessayez.";
 const rateLimited =
   `Trop de messages ont été envoyés depuis cette connexion. Réessayez dans quelques minutes, ou écrivez à ${site.email}.`;
 
 export type ContactEnv = {
   webhookUrl: string;
-  authHeader: string;
   authSecret: string;
 };
 
 export function contactEnvFrom(source: {
   N8N_WEBHOOK_URL?: string;
   N8N_WEBHOOK_SECRET?: string;
-  N8N_WEBHOOK_AUTH_HEADER?: string;
 }): ContactEnv {
   return {
     webhookUrl: source.N8N_WEBHOOK_URL?.trim() ?? "",
     authSecret: source.N8N_WEBHOOK_SECRET?.trim() ?? "",
-    authHeader: source.N8N_WEBHOOK_AUTH_HEADER?.trim() ?? "",
   };
 }
 
@@ -149,38 +148,51 @@ function parseBody(raw: string, type: string) {
 }
 
 function resolveWebhook(env: ContactEnv) {
-  if (!env.webhookUrl) {
-    return { ok: false as const, status: 503 as const, log: "contact: N8N_WEBHOOK_URL manquant" };
+  if (!env.webhookUrl || !env.authSecret) {
+    return { ok: false as const, status: 503 as const, log: "contact: configuration incomplète" };
   }
 
   let url: URL;
   try {
     url = new URL(env.webhookUrl);
   } catch {
-    return { ok: false as const, status: 500 as const, log: "contact: N8N_WEBHOOK_URL invalide" };
+    return { ok: false as const, status: 500 as const, log: "contact: webhook invalide" };
   }
-  if (url.protocol !== "https:") {
-    return { ok: false as const, status: 500 as const, log: "contact: N8N_WEBHOOK_URL doit être en https" };
+  if (url.protocol !== "https:" || !HEADER_VALUE.test(env.authSecret)) {
+    return { ok: false as const, status: 500 as const, log: "contact: webhook invalide" };
   }
 
-  const headers: Record<string, string> = {
-    "content-type": "application/json",
-    accept: "application/json",
+  return {
+    ok: true as const,
+    url: url.href,
+    headers: {
+      "content-type": "application/json",
+      accept: "application/json",
+      [WEBHOOK_HEADER]: env.authSecret,
+    },
   };
+}
 
-  if (env.authHeader && !env.authSecret) {
-    return { ok: false as const, status: 500 as const, log: "contact: N8N_WEBHOOK_SECRET manquant" };
+async function readWebhookResult(upstream: Response) {
+  let text = "";
+  try {
+    text = await upstream.text();
+  } catch {
+    return "down" as const;
+  }
+  if (text.length > 4_000) text = text.slice(0, 4_000);
+
+  let data: unknown = null;
+  try {
+    data = JSON.parse(text);
+  } catch {
+    data = null;
   }
 
-  if (env.authSecret) {
-    const name = env.authHeader || "Authorization";
-    if (!HEADER_NAME.test(name) || !HEADER_VALUE.test(env.authSecret)) {
-      return { ok: false as const, status: 500 as const, log: "contact: en-tête d'authentification invalide" };
-    }
-    headers[name] = env.authSecret;
-  }
-
-  return { ok: true as const, url: url.href, headers };
+  const record = data && typeof data === "object" && !Array.isArray(data) ? (data as { ok?: unknown; error?: unknown }) : null;
+  if (upstream.status === 200 && record?.ok === true) return "sent" as const;
+  if (upstream.status === 400 && record?.ok === false && record.error === "invalid_request") return "rejected" as const;
+  return "down" as const;
 }
 
 export async function handleContactRequest(request: Request, options: Options = {}) {
@@ -249,13 +261,17 @@ export async function handleContactRequest(request: Request, options: Options = 
       redirect: "error",
       signal: AbortSignal.timeout(10_000),
     });
-    await upstream.body?.cancel().catch(() => undefined);
-    if (!upstream.ok) {
-      console.error("contact: webhook a répondu", upstream.status);
+    const outcome = await readWebhookResult(upstream);
+    if (outcome === "rejected") {
+      console.error("contact: demande refusée");
+      return reply(html, 400, { ok: false, error: rejectedRequest });
+    }
+    if (outcome !== "sent") {
+      console.error("contact: webhook indisponible");
       return reply(html, 502, { ok: false, error: upstreamError });
     }
   } catch {
-    console.error("contact: webhook injoignable");
+    console.error("contact: webhook indisponible");
     return reply(html, 502, { ok: false, error: upstreamError });
   }
 

@@ -16,7 +16,6 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     env: contactEnvFrom({
       N8N_WEBHOOK_URL: process.env["N8N_WEBHOOK_URL"],
       N8N_WEBHOOK_SECRET: process.env["N8N_WEBHOOK_SECRET"],
-      N8N_WEBHOOK_AUTH_HEADER: process.env["N8N_WEBHOOK_AUTH_HEADER"],
     }),
     limiter: sharedContactLimiter,
   });

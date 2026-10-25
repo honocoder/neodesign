@@ -20,8 +20,7 @@ const validBody = {
 function env(partial: Partial<ContactEnv> = {}): ContactEnv {
   return {
     webhookUrl,
-    authHeader: "",
-    authSecret: "",
+    authSecret: secret,
     ...partial,
   };
 }
@@ -47,6 +46,7 @@ async function submit(
     limit?: number;
     now?: number;
     status?: number;
+    body?: string;
     throw?: boolean;
   } = {},
 ) {
@@ -59,21 +59,25 @@ async function submit(
     limiter,
     fetchImpl: async (input, init) => {
       calls.push({ url: String(input), init: init ?? {} });
-      if (extra.throw) throw new Error("réseau coupé");
-      return new Response("réponse interne", { status: extra.status ?? 200 });
+      if (extra.throw) throw new Error(`connect ${webhookUrl}`);
+      return new Response(extra.body ?? JSON.stringify({ ok: true }), {
+        status: extra.status ?? 200,
+        headers: { "content-type": "application/json" },
+      });
     },
   });
   const json = (await response.json()) as { ok: boolean; error?: string };
   return { response, json, calls };
 }
 
-const sent = await submit(validBody, { authHeader: "X-Webhook-Token", authSecret: secret });
+const sent = await submit(validBody, { authSecret: "clef!test@exemple?ok" });
 assert.equal(sent.response.status, 200);
 assert.deepEqual(sent.json, { ok: true });
 assert.equal(sent.calls.length, 1);
 assert.equal(sent.calls[0].url, webhookUrl);
 assert.equal(sent.calls[0].url.includes("jimsvault"), false);
 const forwarded = JSON.parse(String(sent.calls[0].init.body));
+assert.deepEqual(Object.keys(forwarded), ["name", "email", "phone", "company", "offer", "message", "source"]);
 assert.deepEqual(forwarded, {
   name: "Camille Martin",
   email: "camille@exemple.fr",
@@ -87,21 +91,11 @@ assert.equal("nd_hp" in forwarded, false);
 assert.equal(String(sent.calls[0].init.body).includes("autre-source"), false);
 const headers = sent.calls[0].init.headers as Record<string, string>;
 assert.equal(headers["content-type"], "application/json");
-assert.equal(headers.accept, "application/json");
-assert.equal(headers["X-Webhook-Token"], secret);
+assert.equal(headers["X-NeoDesign-Webhook-Token"], "clef!test@exemple?ok");
+assert.equal(headers.Authorization, undefined);
 assert.equal(sent.calls[0].init.redirect, "error");
-assert.equal(JSON.stringify(sent.json).includes(secret), false);
+assert.equal(JSON.stringify(sent.json).includes("clef!test@exemple?ok"), false);
 assert.equal(JSON.stringify(sent.json).includes(webhookUrl), false);
-
-const noAuth = await submit(validBody);
-assert.equal(noAuth.response.status, 200);
-const noAuthHeaders = noAuth.calls[0].init.headers as Record<string, string>;
-assert.equal(noAuthHeaders.Authorization, undefined);
-assert.equal(Object.keys(noAuthHeaders).some((key) => key.toLowerCase().includes("auth")), false);
-
-const defaultHeader = await submit(validBody, { authSecret: secret });
-const defaultHeaders = defaultHeader.calls[0].init.headers as Record<string, string>;
-assert.equal(defaultHeaders.Authorization, secret);
 
 const spam = await submit({ ...validBody, nd_hp: "https://spam.example" });
 assert.equal(spam.response.status, 200);
@@ -135,15 +129,29 @@ const httpUrl = await submit(validBody, { webhookUrl: "http://n8n.example.test/w
 assert.equal(httpUrl.response.status, 500);
 assert.equal(httpUrl.calls.length, 0);
 
-const headerWithoutSecret = await submit(validBody, { authHeader: "X-Webhook-Token", authSecret: "" });
-assert.equal(headerWithoutSecret.response.status, 500);
-assert.equal(headerWithoutSecret.calls.length, 0);
+const missingSecret = await submit(validBody, { authSecret: "" });
+assert.equal(missingSecret.response.status, 503);
+assert.equal(missingSecret.calls.length, 0);
+assert.match(missingSecret.json.error ?? "", /indisponible/);
 
-const badHeader = await submit(validBody, { authHeader: "X-Bad\nHeader", authSecret: secret });
-assert.equal(badHeader.response.status, 500);
-assert.equal(badHeader.calls.length, 0);
+const brokenSecret = await submit(validBody, { authSecret: "mauvais\nsecret" });
+assert.equal(brokenSecret.response.status, 500);
+assert.equal(brokenSecret.calls.length, 0);
 
-const upstream = await submit(validBody, {}, { status: 500 });
+const rejected = await submit(validBody, {}, {
+  status: 400,
+  body: JSON.stringify({ ok: false, error: "invalid_request" }),
+});
+assert.equal(rejected.response.status, 400);
+assert.equal(rejected.json.ok, false);
+assert.match(rejected.json.error ?? "", /pas été accepté/);
+assert.equal(JSON.stringify(rejected.json).includes("invalid_request"), false);
+
+const emptyOk = await submit(validBody, {}, { status: 200, body: "" });
+assert.equal(emptyOk.response.status, 502);
+assert.equal(emptyOk.json.ok, false);
+
+const upstream = await submit(validBody, {}, { status: 500, body: "réponse interne" });
 assert.equal(upstream.response.status, 502);
 assert.match(upstream.json.error ?? "", /n'a pas abouti/);
 assert.equal(JSON.stringify(upstream.json).includes("réponse interne"), false);
@@ -170,7 +178,7 @@ for (let i = 0; i < 3; i += 1) {
     limiter,
     fetchImpl: async (input) => {
       calls.push(String(input));
-      return new Response(null, { status: 200 });
+      return new Response(JSON.stringify({ ok: true }), { status: 200 });
     },
   });
   if (i < 2) assert.equal(response.status, 200);
@@ -188,7 +196,7 @@ const otherIp = await handleContactRequest(post(validBody), {
   env: env(),
   now,
   limiter,
-  fetchImpl: async () => new Response(null, { status: 200 }),
+  fetchImpl: async () => new Response(JSON.stringify({ ok: true }), { status: 200 }),
 });
 assert.equal(otherIp.status, 200);
 
@@ -217,11 +225,14 @@ const formResponse = await handleContactRequest(form, {
   fetchImpl: async (input, init) => {
     formUrl = String(input);
     const payload = JSON.parse(String(init?.body));
+    const sentHeaders = init?.headers as Record<string, string>;
     assert.equal(payload.phone, "06 00 00 00 00");
     assert.equal(payload.offer, "conseil");
     assert.equal(payload.company, null);
     assert.equal(payload.source, "neodesign-website");
-    return new Response(null, { status: 200 });
+    assert.equal("nd_hp" in payload, false);
+    assert.equal(sentHeaders["X-NeoDesign-Webhook-Token"], secret);
+    return new Response(JSON.stringify({ ok: true }), { status: 200 });
   },
 });
 assert.equal(formResponse.status, 200);
@@ -237,5 +248,21 @@ const get = await handleContactRequest(new Request("https://www.agenceneodesign.
   },
 });
 assert.equal(get.status, 405);
+
+const logged: unknown[][] = [];
+const writeError = console.error;
+console.error = (...args: unknown[]) => {
+  logged.push(args);
+};
+try {
+  const noisy = await submit(validBody, {}, { throw: true });
+  assert.equal(noisy.response.status, 502);
+} finally {
+  console.error = writeError;
+}
+const loggedText = JSON.stringify(logged);
+assert.equal(loggedText.includes(secret), false);
+assert.equal(loggedText.includes(webhookUrl), false);
+assert.equal(loggedText.includes("jimsvault"), false);
 
 console.log("contact endpoint ok");

@@ -24,14 +24,11 @@ La fonction transmet ensuite à n8n le JSON ci-dessous, sans champ supplémentai
 
 | Variable | Obligatoire | Rôle |
 | --- | --- | --- |
-| `N8N_WEBHOOK_URL` | oui | URL https du webhook n8n |
-| `N8N_WEBHOOK_SECRET` | non | Valeur exacte de l'en-tête Header Auth. Laisser vide si le webhook n'exige pas d'en-tête. |
-| `N8N_WEBHOOK_AUTH_HEADER` | non | Nom de cet en-tête. Défaut : `Authorization`, seulement si le secret est défini. |
+| `N8N_WEBHOOK_URL` | oui | `https://n8n.jimsvault.tech/webhook/neodesign-contact` |
+| `N8N_WEBHOOK_SECRET` | oui | Clé enregistrée dans n8n. Envoyée telle quelle dans `X-NeoDesign-Webhook-Token`. |
 
-Si n8n attend `Bearer …`, ce préfixe fait partie de `N8N_WEBHOOK_SECRET`.  
-Si le nom d'en-tête est renseigné sans secret, la fonction n'appelle pas le webhook.
-
-Sans `N8N_WEBHOOK_URL`, le site se construit quand même. L'envoi répond alors que le formulaire est indisponible, et le webhook n'est pas appelé.
+La clé ne va ni dans le dépôt, ni dans le navigateur, ni dans les logs.  
+Sans l'une de ces deux variables, le site se construit quand même. L'envoi répond alors que le formulaire est indisponible, et le webhook n'est pas appelé.
 
 L'ancienne variable `PUBLIC_CONTACT_WEBHOOK` n'est plus lue. On peut la retirer de Vercel.
 
@@ -52,10 +49,12 @@ L'ancienne variable `PUBLIC_CONTACT_WEBHOOK` n'est plus lue. On peut la retirer 
 - `phone` et `company` valent `null` quand le champ est vide.
 - `offer` : `site-vitrine` | `maintenance` | `automatisation` | `conseil` | `autre`.
 - Le champ piège `nd_hp` est lu par `/api/contact` puis retiré. S'il est rempli, la fonction répond comme un succès et n'appelle pas n8n.
-- En-têtes vers n8n : `Content-Type: application/json`, `Accept: application/json`, plus l'en-tête secret s'il est configuré.
-- Le navigateur n'a pas besoin de CORS vers n8n : l'appel part du serveur.
+- En-têtes vers n8n : `Content-Type: application/json` et `X-NeoDesign-Webhook-Token`.
+- n8n répond `200` avec `{ "ok": true }` quand le mail part, et `400` avec `{ "ok": false, "error": "invalid_request" }` s'il refuse les données. Le site n'affiche pas ce code : il demande de vérifier les informations.
+- Si n8n ne répond pas, ou répond autre chose, le site affiche une erreur générique et ne confirme pas l'envoi.
+- Le navigateur n'appelle que `/api/contact`. Aucun CORS n'est nécessaire sur n8n pour cet appel serveur à serveur.
 - Cinq envois par adresse IP et par tranche de 10 minutes. Le compteur est en mémoire, donc propre à chaque instance de la fonction Vercel.
 - La confirmation n'est affichée que si `/api/contact` répond `200` avec `{ "ok": true }`.
 
-Ne pas pointer `N8N_WEBHOOK_URL` vers le webhook de production pour un essai.  
+Ne pas envoyer de message réel vers cette URL pour un essai : elle alimente le workflow publié.  
 `pnpm test:contact` construit le JSON et exerce l'endpoint avec un `fetch` simulé.
