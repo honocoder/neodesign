@@ -9,7 +9,7 @@
     "build": "astro build",
     "preview": "astro preview --host",
     "astro": "astro",
-    "test:contact": "node --experimental-strip-types scripts/contact-payload.test.ts"
+    "test:contact": "node --experimental-strip-types scripts/contact-payload.test.ts && node --experimental-strip-types scripts/contact-endpoint.test.ts"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",

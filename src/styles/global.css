@@ -963,7 +963,10 @@ textarea {
     margin-left: 0.4rem;
   }
 
-  .project-grid.home,
+  .project-grid.home {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .tier-grid,
   .reasons {
     grid-template-columns: repeat(3, 1fr);

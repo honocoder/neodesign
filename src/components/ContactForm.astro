@@ -9,7 +9,7 @@ const { selected = "" } = Astro.props;
 const current = offerChoices.some((choice) => choice.id === selected) ? (selected as OfferId) : "";
 ---
 
-<form class="form" data-contact-form novalidate>
+<form class="form" data-contact-form method="post" action="/api/contact" novalidate>
   <div class="fields two">
     <label class="field">
       <span>Nom</span>
@@ -61,7 +61,6 @@ const current = offerChoices.some((choice) => choice.id === selected) ? (selecte
 
 <script>
   import { buildContactPayload } from "../lib/contact-payload";
-  import { CONTACT_WEBHOOK_URL } from "../lib/webhook";
 
   const successText = "Message envoyé. Je vous réponds sous 48 h ouvrées. Si c'est urgent, appelez-moi au 07 82 73 22 79.";
   const offerIds = new Set(["site-vitrine", "maintenance", "automatisation", "conseil", "autre"]);
@@ -102,14 +101,7 @@ const current = offerChoices.some((choice) => choice.id === selected) ? (selecte
 
     status.classList.remove("is-error", "is-ok");
 
-    if (!result.ok && result.spam) {
-      status.textContent = successText;
-      status.classList.add("is-ok");
-      form.reset();
-      return;
-    }
-
-    if (!result.ok) {
+    if (!result.ok && !result.spam) {
       status.textContent = result.error;
       status.classList.add("is-error");
       return;
@@ -120,24 +112,38 @@ const current = offerChoices.some((choice) => choice.id === selected) ? (selecte
     button.textContent = "Envoi…";
 
     try {
-      const response = await fetch(CONTACT_WEBHOOK_URL, {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
-        body: JSON.stringify(result.payload),
-        mode: "cors",
-        credentials: "omit",
+        body: JSON.stringify({
+          name: String(data.get("name") ?? ""),
+          email: String(data.get("email") ?? ""),
+          phone: String(data.get("phone") ?? ""),
+          company: String(data.get("company") ?? ""),
+          offer: String(data.get("offer") ?? ""),
+          message: String(data.get("message") ?? ""),
+          nd_hp: String(data.get("nd_hp") ?? ""),
+        }),
       });
-      if (!response.ok) throw new Error(String(response.status));
+      const payload = await response.json().catch(() => null);
+      if (!response.ok || !payload || payload.ok !== true) {
+        status.classList.add("is-error");
+        status.textContent =
+          payload && typeof payload.error === "string" && payload.error
+            ? payload.error
+            : "L'envoi n'a pas abouti. Écrivez-moi à bonjour@agenceneodesign.com ou appelez le 07 82 73 22 79.";
+        return;
+      }
       status.textContent = successText;
       status.classList.add("is-ok");
       form.reset();
     } catch {
       status.classList.add("is-error");
-      status.innerHTML =
-        'L\'envoi n\'a pas abouti. Écrivez-moi à <a href="mailto:bonjour@agenceneodesign.com">bonjour@agenceneodesign.com</a> ou appelez le <a href="tel:+33782732279">07 82 73 22 79</a>.';
+      status.textContent =
+        "L'envoi n'a pas abouti. Écrivez-moi à bonjour@agenceneodesign.com ou appelez le 07 82 73 22 79.";
     } finally {
       form.dataset.sending = "0";
       button.disabled = false;

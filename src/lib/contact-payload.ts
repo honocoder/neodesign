@@ -73,6 +73,14 @@ export function buildContactPayload(input: {
     };
   }
 
+  if (name.length > 120 || email.length > 160 || phone.length > 40 || company.length > 160 || message.length > 5000) {
+    return {
+      ok: false,
+      spam: false,
+      error: "Un des champs est trop long.",
+    };
+  }
+
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return {
       ok: false,

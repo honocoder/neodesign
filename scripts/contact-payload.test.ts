@@ -60,4 +60,18 @@ const missing = buildContactPayload({
 });
 assert.equal(missing.ok, false);
 
+const tooLong = buildContactPayload({
+  name: "Camille",
+  email: "camille@exemple.fr",
+  phone: "",
+  company: "",
+  offer: "autre",
+  message: "a".repeat(5001),
+  honeypot: "",
+});
+assert.equal(tooLong.ok, false);
+if (!tooLong.ok && !tooLong.spam) {
+  assert.match(tooLong.error, /trop long/);
+}
+
 console.log("contact payload ok");
