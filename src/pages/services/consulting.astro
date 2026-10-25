@@ -1,0 +1,73 @@
+---
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import Close from "@components/Close.astro";
+import ServiceSections from "@components/ServiceSections.astro";
+import { getOffer, priceLabel } from "@lib/site";
+
+const offer = getOffer("conseil");
+---
+
+<Base
+  title="Conseil technique VPS, Docker, n8n, Notion à Amiens | NeoDesign"
+  description="Serveur, n8n auto-hébergé ou Notion bien organisé. Conseil et mise en place à partir de 250 € la demi-journée."
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Conseil technique",
+    serviceType: "Conseil technique",
+    provider: { "@type": "ProfessionalService", name: "NeoDesign" },
+    areaServed: "Amiens",
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        minPrice: "250",
+        priceCurrency: "EUR",
+      },
+      description: "À partir de 250 € la demi-journée. TVA non applicable, art. 293 B du CGI.",
+    },
+  }}
+>
+  <PageHero
+    eyebrow="04 · Conseil technique"
+    title="Les bons outils, bien installés."
+    lead="Plusieurs abonnements qui ne se parlent pas, un serveur que plus personne n'ose toucher, ou l'envie de tester n8n sans vous perdre. On remet ça à plat, puis on installe une solution simple."
+  >
+    <p class="lead">{priceLabel(offer)}. TVA non applicable, art. 293 B du CGI.</p>
+    <div class="actions">
+      <a class="btn btn-lime" href={offer.contact}>Réserver un échange</a>
+    </div>
+  </PageHero>
+
+  <ServiceSections
+    glance={[
+      { title: "Un appel", text: "30 minutes, gratuites, pour voir si le sujet est clair." },
+      { title: "Une proposition", text: "Au forfait ou en demi-journées, écrite avant de commencer." },
+      { title: "Une documentation", text: "À la fin, vous pouvez vous en servir sans rappeler à chaque clic." },
+    ]}
+    includedTitle="Ce que je peux faire"
+    included={[
+      "Serveur VPS et Docker : installation, pare-feu, mises à jour, sauvegardes, applications en conteneurs.",
+      "n8n auto-hébergé : installation sur votre serveur, premiers scénarios, prise en main.",
+      "Notion : un espace pour les clients, les projets, les devis et les notes.",
+      "Choix d'outils : un regard sur vos abonnements et vos usages, avec des recommandations.",
+      "IA au quotidien : où elle fait gagner du temps, et où elle n'a rien à faire.",
+    ]}
+    sideTitle="Le déroulement"
+    sideLead="Un audit d'outils peut être proposé au forfait. Son montant se décide au devis."
+    side={[
+      "Un appel de 30 minutes, gratuit, pour comprendre le besoin.",
+      "Une proposition écrite, au forfait ou en demi-journées.",
+      "L'intervention, à distance ou sur place près d'Amiens.",
+      "Une documentation simple à la fin.",
+    ]}
+    steps={[
+      { title: "L'existant", text: "Les outils déjà payés, et ceux que personne n'utilise." },
+      { title: "Le choix", text: "On garde ce qui sert, on installe ce qui manque." },
+      { title: "L'autonomie", text: "La documentation décrit comment continuer seul." },
+    ]}
+  />
+  <Close href={offer.contact} title="Réserver un échange" />
+</Base>

@@ -1,127 +1,60 @@
-# Astroship - Astro Starter Template 🛸
+# NeoDesign
 
-Astroship is a starter template for startups, marketing websites, landing pages & blog. Built with Astro & TailwindCSS.
-
-This Free Template is sponsored by [Web3Templates](https://web3templates.com)
-
-## Live Demo
-
-### [https://astroship.web3templates.com/](https://astroship.web3templates.com/)
-
-### [Download Astroship Template](https://web3templates.com/templates/astroship-starter-website-template-for-astro)
-
-## Deploy this template
-
-You can instantly clone this to your GitHub and deploy the site by clicking the below buttons to deploy to your chosen providers!
-
-Click here to deploy on Vercel:
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fsurjithctly%2Fastroship&project-name=astroship&repository-name=astroship&demo-title=Astroship%20-%20Astro%20Starter%20Template&demo-description=Astroship%20is%20a%20starter%20template%20for%20startups%2C%20marketing%20websites%20%26%20landing%20pages.%20Built%20with%20Astro%2C%20TailwindCSS&demo-url=https%3A%2F%2Fastroship.web3templates.com%2F&demo-image=https%3A%2F%2Fuser-images.githubusercontent.com%2F1884712%2F200831799-10ef2456-a02e-4068-b580-4b5326f0b33b.png)
-
-Click here to deploy on Netlify:
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/surjithctly/astroship)
-
-## Preview
-
-![image](https://user-images.githubusercontent.com/1884712/200831799-10ef2456-a02e-4068-b580-4b5326f0b33b.png)
-
-### Pagespeed Score
-
-[![pagespeed](https://user-images.githubusercontent.com/1884712/210250214-7aa98167-7993-4b90-8138-326b8fa0c223.png)](https://pagespeed.web.dev/report?url=https%3A%2F%2Fastroship.web3templates.com%2F)
-
-
-## Installation
-
-If you are reading this on github, you can click on the "Use this template" button above to create a new repository from astroship to your account. Then you can do a `git clone` to clone it to your local system.
-
-Alternatively, you can clone the project directly from this repo to your local system.
-
-### 1. Clone the repo
+Site vitrine de Jimy Marletta, développeur web freelance près d'Amiens.  
+Astro, pages statiques, français. Le formulaire de contact passe par une fonction serveur.
 
 ```bash
-git clone https://github.com/surjithctly/astroship.git myProjectName
-# or
-git clone https://github.com/surjithctly/astroship.git .
-```
-
-The `.` will clone it to the current directory so make sure you are inside your project folder first.
-
-### 2. Install Dependencies
-
-```bash
-npm install
-# or
-yarn install
-# or (recommended)
 pnpm install
-```
-
-### 3. Start development Server
-
-```bash
-npm run dev
-# or
-yarn dev
-# or (recommended)
 pnpm dev
-```
-
-### Preview & Build
-
-```bash
-npm run preview
-npm run build
-# or
-yarn preview
-yarn build
-# or (recommended)
-pnpm preview
 pnpm build
+pnpm preview
+pnpm test:contact
 ```
 
-We recommend using [pnpm](https://pnpm.io/) to save disk space on your computer.
+Le site canonique est `https://www.agenceneodesign.com`.
 
-### Other Commands
+## Formulaire de contact
 
-```bash
-pnpm astro ...
-pnpm astro add
-pnpm astro --help
+Le navigateur envoie le formulaire à `POST /api/contact`.  
+La fonction transmet ensuite à n8n le JSON ci-dessous, sans champ supplémentaire.
+
+### Variables d'environnement
+
+À configurer sur Vercel, pour l'environnement de production. Elles ne sont pas préfixées par `PUBLIC_` et ne sont pas lues par le code du navigateur.
+
+| Variable | Obligatoire | Rôle |
+| --- | --- | --- |
+| `N8N_WEBHOOK_URL` | oui | `https://n8n.jimsvault.tech/webhook/neodesign-contact` |
+| `N8N_WEBHOOK_SECRET` | oui | Clé enregistrée dans n8n. Envoyée telle quelle dans `X-NeoDesign-Webhook-Token`. |
+
+La clé ne va ni dans le dépôt, ni dans le navigateur, ni dans les logs.  
+Sans l'une de ces deux variables, le site se construit quand même. L'envoi répond alors que le formulaire est indisponible, et le webhook n'est pas appelé.
+
+L'ancienne variable `PUBLIC_CONTACT_WEBHOOK` n'est plus lue. On peut la retirer de Vercel.
+
+### Corps exact transmis à n8n
+
+```json
+{
+  "name": "Camille Martin",
+  "email": "camille@exemple.fr",
+  "phone": null,
+  "company": "Atelier Martin",
+  "offer": "site-vitrine",
+  "message": "Bonjour, je voudrais un site.",
+  "source": "neodesign-website"
+}
 ```
 
-## Project Structure
+- `phone` et `company` valent `null` quand le champ est vide.
+- `offer` : `site-vitrine` | `maintenance` | `automatisation` | `conseil` | `autre`.
+- Le champ piège `nd_hp` est lu par `/api/contact` puis retiré. S'il est rempli, la fonction répond comme un succès et n'appelle pas n8n.
+- En-têtes vers n8n : `Content-Type: application/json` et `X-NeoDesign-Webhook-Token`.
+- n8n répond `200` avec `{ "ok": true }` quand le mail part, et `400` avec `{ "ok": false, "error": "invalid_request" }` s'il refuse les données. Le site n'affiche pas ce code : il demande de vérifier les informations.
+- Si n8n ne répond pas, ou répond autre chose, le site affiche une erreur générique et ne confirme pas l'envoi.
+- Le navigateur n'appelle que `/api/contact`. Aucun CORS n'est nécessaire sur n8n pour cet appel serveur à serveur.
+- Cinq envois par adresse IP et par tranche de 10 minutes. Le compteur est en mémoire, donc propre à chaque instance de la fonction Vercel.
+- La confirmation n'est affichée que si `/api/contact` répond `200` avec `{ "ok": true }`.
 
-Inside of your Astro project, you'll see the following folders and files:
-
-```
-/
-├── public/
-│   └── ...
-├── src/
-│   ├── components/
-│   │   └── ...
-│   ├── layouts/
-│   │   └── ...
-│   └── pages/
-│       └── ...
-└── package.json
-```
-
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## TailwindCSS
-
-TailwindCSS is already configured in this repo, so you can start using it without any installation.
-
-## Credits
-
-[Hero Illustration](https://www.figma.com/community/file/1108400791662599811) by [Streamline](https://www.streamlinehq.com/)
-
-## 👀 Want to learn more?
-
-Feel free to check out [Astro Docs](https://docs.astro.build) or jump into our [Discord Chat](https://web3templates.com/discord).
-
-[![Built with Astro](https://astro.badg.es/v1/built-with-astro.svg)](https://astro.build)
+Ne pas envoyer de message réel vers cette URL pour un essai : elle alimente le workflow publié.  
+`pnpm test:contact` construit le JSON et exerce l'endpoint avec un `fetch` simulé.

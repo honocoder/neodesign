@@ -1,0 +1,43 @@
+---
+import NavLinks from "@components/NavLinks.astro";
+---
+
+<a class="skip" href="#contenu">Aller au contenu</a>
+<p class="spine">NeoDesign · près d'Amiens</p>
+<header class="header">
+  <a class="logo" href="/" aria-label="NeoDesign, accueil">
+    <svg viewBox="0 0 32 32" aria-hidden="true">
+      <rect width="32" height="32" rx="8" fill="#0d3326"></rect>
+      <path d="M16 26c0 0-7-6-6-13 1-6 6-8 6-8s4-1 6 5c2 7-6 16-6 16z" fill="#d7f07a"></path>
+    </svg>
+    NeoDesign
+  </a>
+  <nav class="nav-desktop" aria-label="Navigation principale">
+    <NavLinks />
+  </nav>
+  <details class="nav">
+    <summary>
+      <span class="when-closed">Menu</span>
+      <span class="when-open">Fermer</span>
+    </summary>
+    <nav class="nav-panel" aria-label="Navigation principale">
+      <NavLinks />
+    </nav>
+  </details>
+</header>
+
+<script>
+  function closeMenus() {
+    document.querySelectorAll("details.nav, details.nav-group").forEach((node) => {
+      if (node instanceof HTMLDetailsElement) node.open = false;
+    });
+  }
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    if (target.closest(".nav-panel a, .nav-desktop a")) closeMenus();
+  });
+
+  document.addEventListener("astro:page-load", closeMenus);
+</script>

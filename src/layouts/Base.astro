@@ -1,0 +1,116 @@
+---
+import { ClientRouter } from "astro:transitions";
+import "@fontsource-variable/fraunces/standard.css";
+import "@fontsource-variable/source-sans-3/wght.css";
+import "../styles/global.css";
+import fraunces from "@fontsource-variable/fraunces/files/fraunces-latin-standard-normal.woff2?url";
+import sans from "@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url";
+import Header from "@components/Header.astro";
+import Footer from "@components/Footer.astro";
+import { site } from "@lib/site";
+
+interface Props {
+  title: string;
+  description: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const { title, description, jsonLd } = Astro.props;
+const pathname = Astro.url.pathname.replace(/\/$/, "") || "/";
+const canonical = new URL(pathname, Astro.site).toString();
+const image = new URL("/og.png", Astro.site).toString();
+
+const business = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  name: site.name,
+  description: site.tagline,
+  url: site.url,
+  image,
+  telephone: site.phoneSchema,
+  email: site.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: site.street,
+    postalCode: site.postalCode,
+    addressLocality: site.city,
+    addressCountry: "FR",
+  },
+  areaServed: [
+    { "@type": "City", name: "Amiens" },
+    { "@type": "AdministrativeArea", name: "Somme" },
+  ],
+  founder: {
+    "@type": "Person",
+    name: site.owner,
+  },
+};
+
+const structured = [business, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];
+---
+
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0d3326" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="preload" href={fraunces} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={sans} as="font" type="font/woff2" crossorigin />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="generator" content={Astro.generator} />
+    <ClientRouter fallback="swap" />
+    <script type="application/ld+json" set:html={JSON.stringify(structured)} />
+  </head>
+  <body>
+    <Header />
+    <main id="contenu">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      const root = document.documentElement;
+      root.classList.add("js");
+
+      function reveal() {
+        const nodes = document.querySelectorAll(".reveal:not(.is-in)");
+        const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        if (reduce || !("IntersectionObserver" in window)) {
+          nodes.forEach((node) => node.classList.add("is-in"));
+          return;
+        }
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              entry.target.classList.add("is-in");
+              observer.unobserve(entry.target);
+            }
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.12 },
+        );
+        nodes.forEach((node) => observer.observe(node));
+      }
+
+      reveal();
+      document.addEventListener("astro:page-load", reveal);
+    </script>
+  </body>
+</html>

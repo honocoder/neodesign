@@ -1,45 +1,29 @@
 ---
-import Contactform2 from "@components/contactform2.astro";
-import Container from "@components/container.astro";
-import Sectionhead from "@components/sectionhead.astro";
-import Layout from "@layouts/Layout.astro";
-import { Icon } from "astro-icon";
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import ContactForm from "@components/ContactForm.astro";
+import { offerChoices, site } from "@lib/site";
+
+const offre = Astro.url.searchParams.get("offre") ?? "";
+const selected = offerChoices.some((choice) => choice.id === offre) ? offre : "";
 ---
 
-<Layout title="Contact">
-  <Container>
-    <Sectionhead>
-      <Fragment slot="title">Contact</Fragment>
-      <Fragment slot="desc">On travaille ensemble ?</Fragment>
-    </Sectionhead>
-
-    <div class="mx-auto max-w-4xl mt-16">
-      <div>
-        <h2 class="font-medium text-2xl text-gray-800">Contacter NeoDesign</h2>
-        <p class="text-lg leading-relaxed text-slate-500 mt-3">
-          Vous avez un projet ? Vous souhaitez en savoir plus sur mes services ?
-          N'hésitez pas à me contacter, je vous répondrai dans les plus brefs
-          délais.
-        </p>
-        <div class="mt-5">
-          <div class="flex items-center mt-2 space-x-2 text-gray-600">
-            <Icon class="text-gray-400 w-4 h-4" name="uil:map-marker" />
-            <span>Amiens, France</span>
-          </div><div class="flex items-center mt-2 space-x-2 text-gray-600">
-            <Icon class="text-gray-400 w-4 h-4" name="uil:envelope" /><a
-              href="mailto:bonjour@agenceneodesign.com"
-              >bonjour@agenceneodesign.com</a
-            >
-          </div><div class="flex items-center mt-2 space-x-2 text-gray-600">
-            <Icon class="text-gray-400 w-4 h-4" name="uil:phone" /><a
-              href="tel:+33782732279">07 82 73 22 79</a
-            >
-          </div>
-          <div class="mt-16">
-            <Contactform2 />
-          </div>
-        </div>
-      </div>
-    </div>
-  </Container>
-</Layout>
+<Base
+  title="Contact | NeoDesign"
+  description="Décrivez votre projet à Jimy Marletta, développeur freelance près d'Amiens. Réponse sous 48 h ouvrées."
+>
+  <PageHero
+    eyebrow="Contact"
+    title="Dites-moi ce dont vous avez besoin."
+    lead={`Décrivez votre besoin en quelques lignes : je vous réponds sous ${site.responseTime} avec une première estimation ou quelques questions. Vous préférez parler ? Appelez-moi au ${site.phoneDisplay}.`}
+  />
+  <div class="wrap contact-grid">
+    <aside class="contact-aside">
+      <p><a href={site.phoneHref}>{site.phoneDisplay}</a></p>
+      <p><a href={`mailto:${site.email}`}>{site.email}</a></p>
+      <p>{site.city}, France. Sur place dans la Somme, ou à distance.</p>
+      <p class="note">Prestations réservées aux professionnels.</p>
+    </aside>
+    <ContactForm selected={selected} />
+  </div>
+</Base>

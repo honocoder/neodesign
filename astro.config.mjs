@@ -1,27 +1,28 @@
 import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
-import image from "@astrojs/image";
-import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
-import vercel from "@astrojs/vercel/static";
+import vercel from "@astrojs/vercel";
+import tailwindcss from "@tailwindcss/vite";
 
+// https://astro.build/config
 export default defineConfig({
-  site: "https://agenceneodesign.com",
+  site: "https://www.agenceneodesign.com",
+  trailingSlash: "never",
   output: "static",
-  adapter: vercel({
-    webAnalytics: {
-      enabled: true,
-    },
-  }),
-  experimental: {
-    viewTransitions: true,
+  adapter: vercel(),
+  redirects: {
+    "/pricing": "/tarifs",
+    "/about": "/a-propos",
+    "/services/web-dev": "/services/site-vitrine",
+    "/services/graphisme": "/services/site-vitrine",
+    "/services/seo-sea": "/services/site-vitrine",
+    "/services/mobile-dev": "/tarifs",
+  },
+  vite: {
+    plugins: [tailwindcss()],
   },
   integrations: [
-    tailwind(),
-    image({
-      serviceEntryPoint: "@astrojs/image/sharp",
+    sitemap({
+      filter: (page) => !page.includes("/404"),
     }),
-    mdx(),
-    sitemap(),
   ],
 });

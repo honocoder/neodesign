@@ -1,0 +1,67 @@
+---
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import Close from "@components/Close.astro";
+import ServiceSections from "@components/ServiceSections.astro";
+import { getOffer, priceLabel, vitrineIncludes, vitrineOptions } from "@lib/site";
+
+const offer = getOffer("site-vitrine");
+const description =
+  "Création de site web, vitrine ou boutique, rapide et facile à mettre à jour. Pour les professionnels, à partir de 1 200 €.";
+---
+
+<Base
+  title="Site Web à Amiens | NeoDesign"
+  description={description}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: offer.name,
+    serviceType: "Création de site web",
+    provider: { "@type": "ProfessionalService", name: "NeoDesign" },
+    areaServed: "Amiens",
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        minPrice: "1200",
+        priceCurrency: "EUR",
+      },
+      description: "À partir de 1 200 €. TVA non applicable, art. 293 B du CGI.",
+    },
+  }}
+>
+  <PageHero
+    eyebrow="01 · Site Web"
+    title="Un site qui présente, qui vend, et qui demande."
+    lead="Vitrine pour une activité, ou boutique en ligne. Le site est lisible sur téléphone, trouvé sur Google, et capable de recevoir des messages ou des commandes."
+  >
+    <p class="lead">{priceLabel(offer)}. TVA non applicable, art. 293 B du CGI.</p>
+    <div class="actions">
+      <a class="btn btn-lime" href={offer.contact}>Je veux un devis</a>
+      <a class="btn btn-ghost" href="/tarifs">Voir les tarifs</a>
+    </div>
+  </PageHero>
+
+  <ServiceSections
+    glance={[
+      { title: "Vitrine ou boutique", text: "Présenter l'activité, ou vendre en ligne avec un catalogue." },
+      { title: "Lisible partout", text: "Le même site, confortable sur téléphone, tablette et ordinateur." },
+      { title: "À vous ensuite", text: "Deux heures de prise en main, puis un mois de maintenance offert." },
+    ]}
+    includedTitle="Ce qui est inclus"
+    includedLead="Le nombre de pages est fixé dans le devis, selon ce que le projet doit porter."
+    included={vitrineIncludes}
+    sideTitle="En option"
+    sideLead="Une vitrine part de 1 200 €. Une boutique est chiffrée selon le catalogue, les paiements et les livraisons."
+    side={vitrineOptions}
+    steps={[
+      { title: "Le besoin", text: "Ce qui existe déjà, et ce que le site doit faire vraiment." },
+      { title: "Le devis", text: "Un périmètre écrit, un prix, puis la conception." },
+      { title: "La mise en ligne", text: "Intégration, trois séries de retouches, puis le site ouvert." },
+      { title: "La prise en main", text: "Vous savez modifier le site, et le premier mois de maintenance est inclus." },
+    ]}
+  />
+  <Close href={offer.contact} />
+</Base>

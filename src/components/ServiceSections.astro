@@ -1,0 +1,79 @@
+---
+interface Card {
+  title: string;
+  text: string;
+}
+
+interface Props {
+  glance: Card[];
+  includedTitle?: string;
+  includedLead?: string;
+  included?: string[];
+  sideTitle?: string;
+  sideLead?: string;
+  side?: string[];
+  steps?: Card[];
+}
+
+const { glance, includedTitle, includedLead, included = [], sideTitle, sideLead, side = [], steps = [] } = Astro.props;
+---
+
+<section class="section">
+  <div class="wrap service-layout">
+    <div class="glance">
+      {
+        glance.map((item, index) => (
+          <article>
+            <p class="num">{String(index + 1).padStart(2, "0")}</p>
+            <h2>{item.title}</h2>
+            <p>{item.text}</p>
+          </article>
+        ))
+      }
+    </div>
+    <slot />
+    {
+      (included.length > 0 || side.length > 0) && (
+        <div class="service-panels">
+          {included.length > 0 && (
+            <article>
+              <h2>{includedTitle}</h2>
+              {includedLead && <p class="note">{includedLead}</p>}
+              <ul class="checklist">
+                {included.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </article>
+          )}
+          {side.length > 0 && (
+            <article>
+              <h2>{sideTitle}</h2>
+              {sideLead && <p class="note">{sideLead}</p>}
+              <ul class="checklist">
+                {side.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            </article>
+          )}
+        </div>
+      )
+    }
+    {
+      steps.length > 0 && (
+        <div class="service-steps">
+          <h2>Comment ça se passe</h2>
+          <ol>
+            {steps.map((step) => (
+              <li>
+                <h3>{step.title}</h3>
+                <p>{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )
+    }
+  </div>
+</section>
