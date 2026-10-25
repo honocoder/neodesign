@@ -14,7 +14,8 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
-const offer = entry.data.category === "Site vitrine" ? "site-vitrine" : "autre";
+const offer =
+  entry.data.category === "Site vitrine" || entry.data.category === "Site e-commerce" ? "site-vitrine" : "autre";
 ---
 
 <Base title={`${entry.data.title} | NeoDesign`} description={entry.data.snippet}>

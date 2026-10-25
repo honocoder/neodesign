@@ -2,17 +2,17 @@
 import Base from "@layouts/Base.astro";
 import PageHero from "@components/PageHero.astro";
 import Close from "@components/Close.astro";
-import { offers, priceLabel } from "@lib/site";
+import { mobileService, offers, priceLabel } from "@lib/site";
 ---
 
 <Base
   title="Services | NeoDesign"
-  description="Quatre services pour les professionnels : site vitrine, maintenance, automatisation n8n et conseil technique. Développeur web freelance près d'Amiens."
+  description="Sites web, maintenance, automatisation n8n, conseil technique et applications mobiles. Développeur freelance près d'Amiens."
 >
   <PageHero
     eyebrow="Services"
-    title="Quatre façons de vous aider."
-    lead="Sites, maintenance, automatisation et conseil. Les projets e-commerce, applications web ou mobiles se traitent sur devis, en dehors de ces quatre offres."
+    title="Ce que je peux faire pour vous."
+    lead="Sites web, y compris les boutiques, maintenance, automatisation, conseil, et applications mobiles."
   />
   <section class="section">
     <div class="wrap menu-list">
@@ -26,6 +26,12 @@ import { offers, priceLabel } from "@lib/site";
           </a>
         ))
       }
+      <a href={mobileService.href}>
+        <span class="idx">05</span>
+        <h2>{mobileService.name}</h2>
+        <p class="sum">{mobileService.summary}</p>
+        <p class="cost">Sur devis</p>
+      </a>
     </div>
   </section>
   <Close />

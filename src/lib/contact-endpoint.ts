@@ -90,13 +90,29 @@ function reply(html: boolean, status: number, body: JsonBody, extra?: Record<str
   );
 }
 
+type IncomingFields = {
+  name: string;
+  email: string;
+  phone: string;
+  company: string;
+  offer: string;
+  message: string;
+  honeypot: string;
+};
+
+type IncomingError = { error: string; status: number };
+
+function isIncomingError(value: IncomingFields | IncomingError): value is IncomingError {
+  return "error" in value;
+}
+
 function asField(value: unknown) {
   if (value == null) return "";
   if (typeof value !== "string") return null;
   return value;
 }
 
-function fromRecord(record: Record<string, unknown>) {
+function fromRecord(record: Record<string, unknown>): IncomingFields | IncomingError {
   const name = asField(record.name);
   const email = asField(record.email);
   const phone = asField(record.phone);
@@ -118,7 +134,7 @@ function fromRecord(record: Record<string, unknown>) {
   return { name, email, phone, company, offer, message, honeypot };
 }
 
-function parseBody(raw: string, type: string) {
+function parseBody(raw: string, type: string): IncomingFields | IncomingError {
   if (type === "application/x-www-form-urlencoded") {
     const params = new URLSearchParams(raw);
     return fromRecord({
@@ -234,7 +250,7 @@ export async function handleContactRequest(request: Request, options: Options = 
   }
 
   const incoming = parseBody(raw, mediaType(request));
-  if ("error" in incoming) {
+  if (isIncomingError(incoming)) {
     return reply(html, incoming.status, { ok: false, error: incoming.error });
   }
 

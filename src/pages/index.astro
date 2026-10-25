@@ -2,18 +2,18 @@
 import Base from "@layouts/Base.astro";
 import Close from "@components/Close.astro";
 import { getCollection } from "astro:content";
-import { offers, priceLabel, site } from "@lib/site";
+import { mobileService, offers, priceLabel, site } from "@lib/site";
 
 const projects = (await getCollection("projects"))
   .filter((project) => project.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
 
 const description =
-  "Sites vitrines rapides, maintenance, automatisations n8n et conseil technique pour TPE, artisans, professions libérales, associations et startups, près d'Amiens.";
+  "Sites web, maintenance, automatisations n8n, conseil technique et applications mobiles pour les professionnels, près d'Amiens.";
 ---
 
 <Base
-  title="Développeur web freelance à Amiens : sites, maintenance, automatisation | NeoDesign"
+  title="Développeur freelance à Amiens : sites, maintenance, automatisation | NeoDesign"
   description={description}
 >
   <section class="hero">
@@ -28,7 +28,7 @@ const description =
     <div class="orb orb-b" aria-hidden="true"></div>
     <div class="wrap hero-grid">
       <div>
-        <p class="eyebrow">Développeur web freelance · près d'Amiens</p>
+        <p class="eyebrow">Développeur freelance · près d'Amiens</p>
         <h1>Des sites et des outils <span>qui travaillent</span> pour vous.</h1>
         <p class="lead">
           J'aide les professionnels — TPE, artisans, professions libérales, associations et startups — à avoir un site rapide et à jour, et à gagner du temps grâce à l'automatisation.
@@ -72,6 +72,17 @@ const description =
           ))
         }
       </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="wrap">
+      <a class="plain-card mobile-banner" href={mobileService.href}>
+        <p class="eyebrow">Aussi</p>
+        <h2>Applications mobiles</h2>
+        <p>{mobileService.summary}</p>
+        <p class="cost">Sur devis</p>
+      </a>
     </div>
   </section>
 

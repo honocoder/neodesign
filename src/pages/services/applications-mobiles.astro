@@ -1,0 +1,49 @@
+---
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import Close from "@components/Close.astro";
+import ServiceSections from "@components/ServiceSections.astro";
+import { mobileService } from "@lib/site";
+---
+
+<Base
+  title="Applications mobiles | NeoDesign"
+  description="Applications mobiles pour les professionnels, conçues sur devis. Un exemple : SeasonFlow, pour construire une saison de courses."
+>
+  <PageHero
+    eyebrow="Application mobile"
+    title="Quand le téléphone est le bon endroit."
+    lead={mobileService.summary}
+  >
+    <p class="lead">Sur devis. TVA non applicable, art. 293 B du CGI.</p>
+    <div class="actions">
+      <a class="btn btn-lime" href="/contact?offre=autre">Parler d'une application</a>
+      <a class="btn btn-ghost" href="/projects/seasonflow">Voir SeasonFlow</a>
+    </div>
+  </PageHero>
+
+  <ServiceSections
+    glance={[
+      { title: "Un usage précis", text: "L'application sert un geste répété, pas un site recopié sur un petit écran." },
+      { title: "La vôtre", text: "Le produit vous appartient. Pas d'abonnement imposé à la fin du projet." },
+      { title: "Sur devis", text: "Le prix dépend des écrans, des comptes et de ce qui doit fonctionner hors ligne." },
+    ]}
+    includedTitle="Ce que ça peut couvrir"
+    included={[
+      "L'application et les écrans utiles au quotidien.",
+      "Un compte pour retrouver ses données sur ses appareils.",
+      "Un site de présentation, si l'application doit être expliquée avant d'être ouverte.",
+    ]}
+    sideTitle="Un exemple"
+    side={[
+      "SeasonFlow sert à poser une saison de courses, voir le temps entre les objectifs et partager une carte.",
+      "Le périmètre d'une autre application se décide au devis, à partir de votre usage.",
+    ]}
+    steps={[
+      { title: "L'usage", text: "Qui ouvre l'application, et pour faire quoi." },
+      { title: "Le périmètre", text: "Les écrans indispensables, puis ceux qui peuvent attendre." },
+      { title: "La première version", text: "Quelque chose d'utilisable, avant d'ajouter le reste." },
+    ]}
+  />
+  <Close href="/contact?offre=autre" title="Parler d'une application" />
+</Base>

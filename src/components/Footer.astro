@@ -1,12 +1,12 @@
 ---
-import { offers, site } from "@lib/site";
+import { mobileService, offers, site } from "@lib/site";
 ---
 
 <footer class="footer">
   <div class="wrap footer-grid">
     <div>
       <a class="logo" href="/">NeoDesign</a>
-      <p class="lead">{site.tagline}. Sites, maintenance, automatisation et conseil pour les professionnels.</p>
+      <p class="lead">{site.tagline}. Sites web, maintenance, automatisation, conseil et applications mobiles pour les professionnels.</p>
     </div>
     <div>
       <h2>Pages</h2>
@@ -24,6 +24,7 @@ import { offers, site } from "@lib/site";
         {offers.map((offer) => (
           <li><a href={offer.href}>{offer.name}</a></li>
         ))}
+        <li><a href={mobileService.href}>{mobileService.name}</a></li>
       </ul>
     </div>
     <div>

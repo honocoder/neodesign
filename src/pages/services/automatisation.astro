@@ -2,6 +2,7 @@
 import Base from "@layouts/Base.astro";
 import PageHero from "@components/PageHero.astro";
 import Close from "@components/Close.astro";
+import ServiceSections from "@components/ServiceSections.astro";
 import { getOffer, priceLabel } from "@lib/site";
 
 const offer = getOffer("automatisation");
@@ -9,7 +10,7 @@ const offer = getOffer("automatisation");
 
 <Base
   title="Automatisation et IA avec n8n | NeoDesign"
-  description="Formulaires, devis, relances et réservations qui s'enchaînent avec n8n. À partir de 500 €, pour TPE, associations et startups."
+  description="Formulaires, devis, relances et réservations qui s'enchaînent avec n8n. À partir de 500 €, pour les professionnels."
   jsonLd={{
     "@context": "https://schema.org",
     "@type": "Service",
@@ -40,29 +41,27 @@ const offer = getOffer("automatisation");
     </div>
   </PageHero>
 
-  <section class="section">
-    <div class="wrap split">
-      <div>
-        <h2>Exemples</h2>
-        <ul class="checklist">
-          <li>Un formulaire de devis qui remplit un tableau et envoie un e-mail.</li>
-          <li>Des rappels avant un rendez-vous.</li>
-          <li>La relance des devis restés sans réponse.</li>
-          <li>Un tri de messages avec une IA, seulement là où elle est utile.</li>
-        </ul>
-      </div>
-      <div>
-        <h2>Ce qui est inclus</h2>
-        <ul class="checklist">
-          <li>Cadrage du besoin</li>
-          <li>Mise en place du scénario</li>
-          <li>Tests</li>
-          <li>Une documentation simple</li>
-          <li>Un mois de suivi</li>
-        </ul>
-        <p class="note">L'hébergement et le suivi des automatisations, au-delà de ce mois, sont chiffrés sur devis.</p>
-      </div>
-    </div>
-  </section>
+  <ServiceSections
+    glance={[
+      { title: "Moins de recopie", text: "Le formulaire, le tableau et l'e-mail se remplissent ensemble." },
+      { title: "n8n, visible", text: "Le scénario reste lisible. Vous voyez ce qui part, et où." },
+      { title: "Un mois de suivi", text: "Après la mise en place, un mois pour ajuster ce qui coince." },
+    ]}
+    includedTitle="Exemples"
+    included={[
+      "Un formulaire de devis qui remplit un tableau et envoie un e-mail.",
+      "Des rappels avant un rendez-vous.",
+      "La relance des devis restés sans réponse.",
+      "Un tri de messages avec une IA, seulement là où elle est utile.",
+    ]}
+    sideTitle="Ce qui est inclus"
+    sideLead="L'hébergement et le suivi, au-delà du premier mois, sont chiffrés sur devis."
+    side={["Cadrage du besoin", "Mise en place du scénario", "Tests", "Une documentation simple", "Un mois de suivi"]}
+    steps={[
+      { title: "Le geste répété", text: "On identifie ce que vous faites à la main, plusieurs fois par semaine." },
+      { title: "Le scénario", text: "n8n relie les outils, avec l'IA seulement si elle fait gagner du temps." },
+      { title: "La prise en main", text: "Une documentation courte, puis un mois pour corriger le réel." },
+    ]}
+  />
   <Close href={offer.contact} />
 </Base>

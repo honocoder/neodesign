@@ -2,6 +2,7 @@
 import Base from "@layouts/Base.astro";
 import PageHero from "@components/PageHero.astro";
 import Close from "@components/Close.astro";
+import ServiceSections from "@components/ServiceSections.astro";
 import { getOffer, maintenanceTiers, priceLabel } from "@lib/site";
 
 const offer = getOffer("maintenance");
@@ -9,7 +10,7 @@ const offer = getOffer("maintenance");
 
 <Base
   title="Maintenance et sécurité de site | NeoDesign"
-  description="Mises à jour, sauvegardes et surveillance de votre site. À partir de 50 € par mois, pour les professionnels."
+  description="Trois forfaits de maintenance : Essentiel 60 €, Sérénité 80 €, Pro 100 € par mois. Mises à jour, sauvegardes et surveillance."
   jsonLd={{
     "@context": "https://schema.org",
     "@type": "Service",
@@ -22,40 +23,49 @@ const offer = getOffer("maintenance");
       priceCurrency: "EUR",
       priceSpecification: {
         "@type": "PriceSpecification",
-        minPrice: "50",
+        minPrice: "60",
         priceCurrency: "EUR",
         unitText: "mois",
       },
-      description: "À partir de 50 € par mois. TVA non applicable, art. 293 B du CGI.",
+      description: "À partir de 60 € par mois. TVA non applicable, art. 293 B du CGI.",
     },
   }}
 >
   <PageHero
     eyebrow="02 · Maintenance"
     title="Le site reste à jour, sans y penser."
-    lead="Mises à jour, sauvegardes, surveillance et petites modifications. Utile quand le site existe déjà et que personne n'a le temps de s'en occuper."
+    lead="Mises à jour, sauvegardes et surveillance. Les forfaits Sérénité et Pro ajoutent du temps chaque mois pour faire évoluer le site, ou plus."
   >
     <p class="lead">{priceLabel(offer)}. TVA non applicable, art. 293 B du CGI.</p>
     <div class="actions">
       <a class="btn btn-lime" href={offer.contact}>Je veux un devis</a>
+      <a class="btn btn-ghost" href="/tarifs#maintenance">Comparer les forfaits</a>
     </div>
   </PageHero>
 
-  <section class="section">
-    <div class="wrap">
-      <h2>La formule de départ, et deux pistes.</h2>
-      <p class="note">
-        Seul le palier Essentiel a un prix arrêté : 50&nbsp;€/mois. Sérénité et Pro sont des formules plus complètes envisagées. Leurs montants et leur périmètre sont à valider, ils ne sont pas des prix publiés.
-      </p>
-      <div class="tier-grid" style="margin-top: 1.5rem;">
+  <ServiceSections
+    glance={[
+      { title: "À jour", text: "Les mises à jour du site sont suivies, sans que vous ayez à les lancer." },
+      { title: "Sauvé", text: "Des sauvegardes pour pouvoir revenir en arrière si quelque chose casse." },
+      { title: "Surveillé", text: "La disponibilité est surveillée : on voit si le site ne répond plus." },
+    ]}
+    steps={[
+      { title: "Le site actuel", text: "On regarde ce qui est en place, et ce qui doit être surveillé." },
+      { title: "Le forfait", text: "Essentiel, Sérénité ou Pro, écrit dans le devis avec le volume d'heures." },
+      { title: "Chaque mois", text: "Les mises à jour et les sauvegardes, plus les heures prévues s'il y en a." },
+    ]}
+  >
+    <div class="tier-block">
+      <h2>Trois forfaits.</h2>
+      <div class="tier-grid">
         {
           maintenanceTiers.map((tier) => (
-            <article class:list={["tier", { pending: tier.pending }]}>
-              <p class="kicker" style="color: var(--leaf); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.78rem;">
-                {tier.pending ? "À valider" : "Prix arrêté"}
-              </p>
+            <article class="tier">
               <h3>{tier.name}</h3>
-              <p class="price-figure">{tier.price}</p>
+              <p class="price-figure">
+                {tier.price}
+                <span class="price-unit">{tier.unit}</span>
+              </p>
               <ul class="checklist">
                 {tier.points.map((point) => (
                   <li>{point}</li>
@@ -65,8 +75,10 @@ const offer = getOffer("maintenance");
           ))
         }
       </div>
-      <p class="note">La fréquence, le volume de modifications et le délai de prise en charge sont écrits dans le devis. Rien n'est laissé dans le flou une fois le contrat signé.</p>
+      <p class="note">
+        Les 2 h de Sérénité portent sur le site. Les 5 h du forfait Pro peuvent servir au site, à un outil ou à une automatisation. Le détail est écrit dans le devis.
+      </p>
     </div>
-  </section>
+  </ServiceSections>
   <Close href={offer.contact} />
 </Base>

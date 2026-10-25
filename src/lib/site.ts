@@ -1,6 +1,6 @@
 export const site = {
   name: "NeoDesign",
-  tagline: "Développeur web freelance près d'Amiens",
+  tagline: "Développeur freelance près d'Amiens",
   url: "https://www.agenceneodesign.com",
   email: "bonjour@agenceneodesign.com",
   phoneDisplay: "07 82 73 22 79",
@@ -19,14 +19,14 @@ export const offers = [
   {
     id: "site-vitrine",
     index: "01",
-    name: "Site vitrine",
+    name: "Site Web",
     href: "/services/site-vitrine",
     contact: "/contact?offre=site-vitrine",
     from: "1\u202f200\u202f€",
     unit: "",
     cadence: "",
     summary:
-      "Un site rapide, clair et facile à mettre à jour, pensé pour être trouvé sur Google et pour recevoir des demandes.",
+      "Vitrine ou boutique : un site rapide, clair, facile à mettre à jour, pensé pour être trouvé et pour recevoir des demandes.",
   },
   {
     id: "maintenance",
@@ -34,11 +34,11 @@ export const offers = [
     name: "Maintenance et sécurité",
     href: "/services/maintenance",
     contact: "/contact?offre=maintenance",
-    from: "50\u202f€",
+    from: "60\u202f€",
     unit: "/mois",
     cadence: "",
     summary:
-      "Mises à jour, sauvegardes, surveillance et petites modifications : le site reste sûr, sans que vous ayez à y penser.",
+      "Trois forfaits, de 60 à 100 € par mois : le site reste à jour, sauvegardé, surveillé, et peut évoluer.",
   },
   {
     id: "automatisation",
@@ -97,58 +97,63 @@ export const vitrineOptions = [
   "Rédaction des textes",
   "Logo ou identité visuelle",
   "Prise de rendez-vous en ligne",
+  "Boutique en ligne",
   "Référencement plus poussé",
 ];
 
-/**
- * Seul Essentiel a un prix arrêté.
- * Sérénité et Pro sont des pistes : montants à valider avant toute publication définitive.
- */
 export const maintenanceTiers = [
   {
     name: "Essentiel",
-    price: "50\u202f€/mois",
-    pending: false,
-    points: [
-      "Mises à jour du site",
-      "Sauvegardes",
-      "Surveillance de la disponibilité",
-      "Petites modifications, volume écrit au devis",
-    ],
+    price: "60\u202f€",
+    unit: "/mois",
+    points: ["Mises à jour du site", "Sauvegardes", "Surveillance de la disponibilité"],
   },
   {
     name: "Sérénité",
-    price: "Montant à valider",
-    pending: true,
-    points: [
-      "Mises à jour plus fréquentes",
-      "Sauvegardes plus fréquentes",
-      "Surveillance de la disponibilité",
-      "Volume de modifications à valider",
-    ],
+    price: "80\u202f€",
+    unit: "/mois",
+    points: ["Tout l'Essentiel", "2 h de modifications sur le site par mois"],
   },
   {
     name: "Pro",
-    price: "Montant à valider",
-    pending: true,
+    price: "100\u202f€",
+    unit: "/mois",
     points: [
-      "Périmètre le plus large",
-      "Réactivité à valider",
-      "Volume de modifications à valider",
-      "Priorité de prise en charge à valider",
+      "Tout l'Essentiel",
+      "5 h de mon temps par mois, pour le site ou au-delà",
+      "Plus réactif",
+      "Priorité de prise en charge",
     ],
   },
 ] as const;
 
+export const mobileService = {
+  href: "/services/applications-mobiles",
+  name: "Applications mobiles",
+  summary: "Une application pour le téléphone, quand le site ne suffit plus. Le périmètre se décide au devis.",
+} as const;
+
+export const serviceLinks = [
+  ...offers.map((offer) => ({ href: offer.href, label: offer.name })),
+  { href: mobileService.href, label: mobileService.name },
+] as const;
+
 export const tools = [
   "Astro",
-  "WordPress",
-  "Tailwind CSS",
   "Next.js",
+  "React",
+  "TypeScript",
+  "Tailwind CSS",
+  "WordPress",
+  "WooCommerce",
+  "Webflow",
   "n8n",
   "Docker",
   "VPS Linux",
+  "Vercel",
+  "Zendesk",
   "Notion",
+  "Git",
 ];
 
 export function priceLabel(offer: (typeof offers)[number]) {

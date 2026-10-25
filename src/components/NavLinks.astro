@@ -1,0 +1,41 @@
+---
+import { serviceLinks } from "@lib/site";
+
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const active = (href: string) => path === href || path.startsWith(`${href}/`);
+const projectsActive = path === "/projets" || path.startsWith("/projects/");
+const servicesActive = path === "/services" || path.startsWith("/services/");
+
+const links = [
+  { href: "/projets", label: "Réalisations", current: projectsActive },
+  { href: "/tarifs", label: "Tarifs", current: active("/tarifs") },
+  { href: "/a-propos", label: "À propos", current: active("/a-propos") },
+];
+---
+
+<a class="nav-home" href="/" aria-current={path === "/" ? "page" : undefined}>Accueil</a>
+<details class="nav-group">
+  <summary class="sub-toggle" aria-current={servicesActive ? "page" : undefined}>Services</summary>
+  <div class="nav-sub">
+    <a href="/services" aria-current={path === "/services" ? "page" : undefined}>Tous les services</a>
+    {
+      serviceLinks.map((link) => (
+        <a href={link.href} aria-current={path === link.href ? "page" : undefined}>
+          {link.label}
+        </a>
+      ))
+    }
+  </div>
+</details>
+{
+  links.map((link) => (
+    <a href={link.href} aria-current={link.current ? "page" : undefined}>
+      {link.label}
+    </a>
+  ))
+}
+<a class="btn btn-lime" href="/contact" aria-current={path === "/contact" ? "page" : undefined}>Contact</a>
+<div class="nav-legal">
+  <a href="/mentions-legales">Mentions légales</a>
+  <a href="/politique-de-confidentialité">Confidentialité</a>
+</div>
