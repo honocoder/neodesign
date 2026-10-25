@@ -1,74 +1,43 @@
 ---
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import Close from "@components/Close.astro";
 import { getCollection } from "astro:content";
-import { Picture } from "@astrojs/image/components";
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/container.astro";
-import Sectionhead from "@components/sectionhead.astro";
 
-const publishedProjects = await getCollection("projects", ({ data }) => {
-  return !data.draft && data.publishDate < new Date();
-});
-
-publishedProjects.sort(function (a, b) {
-  return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
-});
-
-import { getFormattedDate } from "@utils/all";
+const projects = (await getCollection("projects")).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<Layout title="Projets">
-  <Container>
-    <Sectionhead>
-      <Fragment slot="title">Projets</Fragment>
-      <Fragment slot="desc">
-        Vous trouverez ici quelques projets sélectionnés pour vous faire une
-        idée de mon travail. N'oubliez pas que chaque projet est unique et que
-        je nous décidons ensemble de la meilleure solution pour votre projet,
-        tant au niveau du design que de la technique.
-      </Fragment>
-    </Sectionhead>
-
-    <main class="mt-16">
-      <ul class="grid gap-16 max-w-4xl mx-auto">
-        {
-          publishedProjects.map((project, index) => (
-            <li>
-              <a href={`/projects/${project.slug}`}>
-                <div class="grid md:grid-cols-2 gap-5 md:gap-10 items-center">
-                  <Picture
-                    src={project.data.image.src}
-                    alt={project.data.image.alt}
-                    sizes="(max-width: 800px) 100vw, 800px"
-                    widths={[200, 400, 800]}
-                    aspectRatio="16:9"
-                    background="#ffffff"
-                    fit="cover"
-                    position="center"
-                    loading={index <= 2 ? "eager" : "lazy"}
-                    decoding={index <= 2 ? "sync" : "async"}
-                    class="w-full rounded-md"
-                  />
-                  <div>
-                    <span class="text-blue-400 uppercase tracking-wider text-sm font-medium">
-                      {project.data.category}
-                    </span>
-
-                    <h2 class="text-3xl font-semibold leading-snug tracking-tight mt-1 ">
-                      {project.data.title}
-                    </h2>
-
-                    <div class="flex gap-2 mt-3">
-                      <time class="text-gray-400">
-                        {getFormattedDate(project.data.publishDate)}
-                      </time>
-                    </div>
-                  </div>
-                </div>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </main>
-  </Container>
-</Layout>
+<Base
+  title="Réalisations | NeoDesign"
+  description="Sites vitrines, blog, centre d'aide et application web réalisés par NeoDesign pour des professionnels."
+>
+  <PageHero
+    eyebrow="Réalisations"
+    title="Des projets, pas un catalogue."
+    lead="Une sélection pour se faire une idée. Chaque projet est unique, et nous décidons ensemble de la solution, du design comme de la technique."
+  />
+  <section class="section">
+    <div class="wrap project-grid">
+      {
+        projects.map((project, index) => (
+          <a class="project-card" href={`/projects/${project.id}`}>
+            <div class="frame">
+              <img
+                src={project.data.image.src}
+                alt={project.data.image.alt}
+                width={project.data.image.width}
+                height={project.data.image.height}
+                loading={index < 2 ? "eager" : "lazy"}
+                decoding="async"
+              />
+            </div>
+            <p class="kicker">{project.data.category}</p>
+            <h2>{project.data.title}</h2>
+            <p>{project.data.snippet}</p>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+  <Close />
+</Base>

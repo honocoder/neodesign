@@ -1,0 +1,64 @@
+---
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import Close from "@components/Close.astro";
+import { offers, site, tools } from "@lib/site";
+---
+
+<Base
+  title="À propos – Jimy Marletta, développeur web freelance à Amiens | NeoDesign"
+  description="Jimy Marletta, développeur web freelance près d'Amiens. Sites vitrines, maintenance, automatisation n8n et conseil technique pour TPE, artisans, professions libérales, associations et startups."
+>
+  <PageHero
+    eyebrow="À propos"
+    title="Un développeur, un interlocuteur."
+    lead="Je m'appelle Jimy Marletta. Je suis développeur web freelance, près d'Amiens, dans la Somme."
+  />
+
+  <section class="section">
+    <div class="wrap split">
+      <div class="reveal">
+        <p class="eyebrow">Ce que je fais pour vous</p>
+        <h2>Des solutions qui tiennent dans le temps.</h2>
+        <p class="note">
+          Je travaille exclusivement avec des professionnels : TPE, artisans, professions libérales, associations et startups.
+        </p>
+      </div>
+      <ul class="steps reveal">
+        {
+          offers.map((offer) => (
+            <li>
+              <a href={offer.href}><strong>{offer.name}</strong></a>
+              <span>{offer.summary}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="wrap split">
+      <div class="reveal">
+        <p class="eyebrow">Façon de travailler</p>
+        <h2>Clair dès le premier échange.</h2>
+        <ul class="checklist">
+          <li>Un seul interlocuteur, du premier appel à la mise en ligne.</li>
+          <li>Un devis clair avant de commencer, sans jargon.</li>
+          <li>Des outils simples que vous gardez en main : pas de dépendance artificielle.</li>
+          <li>Une réponse sous {site.responseTime}.</li>
+        </ul>
+      </div>
+      <div class="reveal">
+        <p class="eyebrow">Outils</p>
+        <h2>La boîte à outils.</h2>
+        <p>Ceux que j'utilise selon le projet, pas une liste à rallonge.</p>
+        <ul class="tools">
+          {tools.map((tool) => <li>{tool}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Close href="/contact" title="Parlons de votre projet" />
+</Base>

@@ -1,56 +1,32 @@
 ---
-import { getCollection } from "astro:content";
-import { Picture } from "@astrojs/image/components";
-import Layout from "@layouts/Layout.astro";
-import Container from "@components/container.astro";
-import Sectionhead from "@components/sectionhead.astro";
-
-// Filter team entries with 'draft: false' & date before current date
-// const publishedTeamMembers = await getCollection("team", ({ data }) => {
-//   return !data.draft && data.publishDate < new Date();
-// });
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import Close from "@components/Close.astro";
+import { offers, priceLabel } from "@lib/site";
 ---
 
-<Layout title="About">
-  <Container>
-    <Sectionhead>
-      <Fragment slot="title">Services</Fragment>
-      <Fragment slot="desc">
-        Je vous propose différents services, pour répondre à vos problématiques.
-      </Fragment>
-    </Sectionhead>
-
-    <div class="flex flex-col gap-3 mx-auto max-w-4xl mt-16">
-      <h2 class="font-bold text-3xl text-gray-800">
-        Choisissez votre type de projet.
-      </h2>
-      <p class="text-lg leading-relaxed text-slate-500">
-        Du site e-commerce à l'application, en passant par le site vitrine ou
-        l'application web, je peux vous aider à réaliser votre projet, en
-        m'adaptant à vos besoins afin de vous proposer la meilleure solution.
-      </p>
+<Base
+  title="Services | NeoDesign"
+  description="Quatre services pour les professionnels : site vitrine, maintenance, automatisation n8n et conseil technique. Développeur web freelance près d'Amiens."
+>
+  <PageHero
+    eyebrow="Services"
+    title="Quatre façons de vous aider."
+    lead="Sites, maintenance, automatisation et conseil. Les projets e-commerce, applications web ou mobiles se traitent sur devis, en dehors de ces quatre offres."
+  />
+  <section class="section">
+    <div class="wrap menu-list">
+      {
+        offers.map((offer) => (
+          <a href={offer.href}>
+            <span class="idx">{offer.index}</span>
+            <h2>{offer.name}</h2>
+            <p class="sum">{offer.summary}</p>
+            <p class="cost">{priceLabel(offer)}</p>
+          </a>
+        ))
+      }
     </div>
-    <div
-      class="flex flex-row justify-center align-center gap-10 mx-auto max-w-4xl mt-12">
-      <a href="/services/web-dev" class="flex-1">
-        <div class="bg-yellow-300 shadow-md rounded-lg p-6 flex-1">
-          <p class="text-xl font-semibold text-gray-800">Développement web</p>
-          <p class="text-gray-600">
-            Site vitrine, site e-commerce ou application web, c'est par ici.
-          </p>
-        </div>
-      </a>
-      <a href="/services/mobile-dev" class="flex-1">
-        <div class="bg-blue-300 shadow-md rounded-lg p-6 flex-1">
-          <p class="text-xl font-semibold text-gray-800">
-            Développement mobile
-          </p>
-          <p class="text-gray-600">
-            Mais si vous êtes plutôt application mobile pour iOS et Android,
-            c'est par ici.
-          </p>
-        </div>
-      </a>
-    </div>
-  </Container>
-</Layout>
+  </section>
+  <Close />
+</Base>

@@ -1,0 +1,65 @@
+---
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import Close from "@components/Close.astro";
+import { getOffer, priceLabel, vitrineIncludes, vitrineOptions } from "@lib/site";
+
+const offer = getOffer("site-vitrine");
+const description =
+  "Création de site vitrine rapide, clair et facile à mettre à jour, pour TPE, artisans, professions libérales et associations. À partir de 1 200 €.";
+---
+
+<Base
+  title="Site vitrine à Amiens | NeoDesign"
+  description={description}
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: offer.name,
+    serviceType: "Création de site vitrine",
+    provider: { "@type": "ProfessionalService", name: "NeoDesign" },
+    areaServed: "Amiens",
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        minPrice: "1200",
+        priceCurrency: "EUR",
+      },
+      description: "À partir de 1 200 €. TVA non applicable, art. 293 B du CGI.",
+    },
+  }}
+>
+  <PageHero
+    eyebrow="01 · Site vitrine"
+    title="Un site qui présente, et qui demande."
+    lead="Pour les artisans, commerces, professions libérales et associations qui veulent une présence claire, lisible sur téléphone, et capable de recevoir des messages."
+  >
+    <p class="lead">{priceLabel(offer)}. TVA non applicable, art. 293 B du CGI.</p>
+    <div class="actions">
+      <a class="btn btn-lime" href={offer.contact}>Je veux un devis</a>
+      <a class="btn btn-ghost" href="/tarifs">Voir les tarifs</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <h2>Ce qui est inclus</h2>
+        <p class="note">Le nombre de pages est fixé dans le devis, selon ce que le projet doit vraiment porter.</p>
+        <ul class="checklist">
+          {vitrineIncludes.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+      <div>
+        <h2>En option</h2>
+        <p class="note">L'identité visuelle simple et le référencement de base font partie du site. On peut aller plus loin si le besoin est là.</p>
+        <ul class="checklist">
+          {vitrineOptions.map((item) => <li>{item}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+  <Close href={offer.contact} />
+</Base>

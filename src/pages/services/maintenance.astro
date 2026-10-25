@@ -1,0 +1,72 @@
+---
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import Close from "@components/Close.astro";
+import { getOffer, maintenanceTiers, priceLabel } from "@lib/site";
+
+const offer = getOffer("maintenance");
+---
+
+<Base
+  title="Maintenance et sécurité de site | NeoDesign"
+  description="Mises à jour, sauvegardes et surveillance de votre site. À partir de 50 € par mois, pour les professionnels."
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: offer.name,
+    serviceType: "Maintenance de site web",
+    provider: { "@type": "ProfessionalService", name: "NeoDesign" },
+    areaServed: "Amiens",
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        minPrice: "50",
+        priceCurrency: "EUR",
+        unitText: "mois",
+      },
+      description: "À partir de 50 € par mois. TVA non applicable, art. 293 B du CGI.",
+    },
+  }}
+>
+  <PageHero
+    eyebrow="02 · Maintenance"
+    title="Le site reste à jour, sans y penser."
+    lead="Mises à jour, sauvegardes, surveillance et petites modifications. Utile quand le site existe déjà et que personne n'a le temps de s'en occuper."
+  >
+    <p class="lead">{priceLabel(offer)}. TVA non applicable, art. 293 B du CGI.</p>
+    <div class="actions">
+      <a class="btn btn-lime" href={offer.contact}>Je veux un devis</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>La formule de départ, et deux pistes.</h2>
+      <p class="note">
+        Seul le palier Essentiel a un prix arrêté : 50&nbsp;€/mois. Sérénité et Pro sont des formules plus complètes envisagées. Leurs montants et leur périmètre sont à valider, ils ne sont pas des prix publiés.
+      </p>
+      <div class="tier-grid" style="margin-top: 1.5rem;">
+        {
+          maintenanceTiers.map((tier) => (
+            <article class:list={["tier", { pending: tier.pending }]}>
+              <p class="kicker" style="color: var(--leaf); font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.78rem;">
+                {tier.pending ? "À valider" : "Prix arrêté"}
+              </p>
+              <h3>{tier.name}</h3>
+              <p class="price-figure">{tier.price}</p>
+              <ul class="checklist">
+                {tier.points.map((point) => (
+                  <li>{point}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+      <p class="note">La fréquence, le volume de modifications et le délai de prise en charge sont écrits dans le devis. Rien n'est laissé dans le flou une fois le contrat signé.</p>
+    </div>
+  </section>
+  <Close href={offer.contact} />
+</Base>

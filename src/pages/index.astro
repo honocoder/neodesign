@@ -1,58 +1,175 @@
 ---
-import Container from "@components/container.astro";
-import Cta from "@components/cta.astro";
-import Features from "@components/features.astro";
-import Hero from "@components/hero.astro";
-import Experience from "@components/experience.astro";
-import Layout from "@layouts/Layout.astro";
-import Statistics from "@components/statistics.astro";
-import Herovideo from "@components/herovideo.astro";
-
+import Base from "@layouts/Base.astro";
+import Close from "@components/Close.astro";
 import { getCollection } from "astro:content";
-import { Picture } from "@astrojs/image/components";
+import { offers, priceLabel, site } from "@lib/site";
 
-const webCards = await getCollection("web", ({ data }) => {
-  return !data.draft && data.publishDate < new Date();
-});
+const projects = (await getCollection("projects"))
+  .filter((project) => project.data.featured)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const description =
+  "Sites vitrines rapides, maintenance, automatisations n8n et conseil technique pour TPE, artisans, professions libérales, associations et startups, près d'Amiens.";
 ---
 
-<Layout title="">
-  <Container>
-    <Hero />
-    <Herovideo />
-    <Features />
-
-    <div class="grid md:grid-cols-3 gap-10 mx-auto max-w-4xl mt-24">
-      {
-        webCards.map((webEntry) => (
-          <div class="group">
-            <div class="w-full aspect-square">
-              <Picture
-                src={webEntry.data.avatar.src}
-                alt={webEntry.data.avatar.alt}
-                sizes="(max-width: 800px) 100vw, 400px"
-                widths={[200, 400]}
-                aspectRatio="1:1"
-                background="#ffffff"
-                fit="cover"
-                position="center"
-                class="w-full rounded-md transition group-hover:-translate-y-1 group-hover:shadow-xl"
-              />
-            </div>
-
-            <div class="mt-4 text-center">
-              <h2 class="text-lg text-gray-800">{webEntry.data.title}</h2>
-              <h3 class="text-sm text-slate-500 text-justify">
-                {webEntry.data.description}
-              </h3>
-            </div>
-          </div>
-        ))
-      }
+<Base
+  title="Développeur web freelance à Amiens : sites, maintenance, automatisation | NeoDesign"
+  description={description}
+>
+  <section class="hero">
+    <svg class="mark" viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="78"></circle>
+      <path class="leaf" d="M100 158C100 158 58 120 68 78C76 42 100 50 100 50C100 50 124 42 132 78C142 120 100 158 100 158Z"></path>
+      <path class="vein" d="M100 150C100 116 100 78 100 56"></path>
+      <path class="vein" d="M100 102C84 94 74 80 68 66"></path>
+      <path class="vein" d="M100 118C118 108 128 92 134 76"></path>
+    </svg>
+    <div class="orb orb-a" aria-hidden="true"></div>
+    <div class="orb orb-b" aria-hidden="true"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">Développeur web freelance · près d'Amiens</p>
+        <h1>Des sites et des outils <span>qui travaillent</span> pour vous.</h1>
+        <p class="lead">
+          J'aide les professionnels — TPE, artisans, professions libérales, associations et startups — à avoir un site rapide et à jour, et à gagner du temps grâce à l'automatisation.
+        </p>
+        <div class="actions">
+          <a class="btn btn-lime" href="/contact">Demander un devis gratuit</a>
+          <a class="btn btn-ghost" href="/projets">Voir les réalisations</a>
+        </div>
+      </div>
+      <div class="offer-index" aria-label="Quatre offres">
+        {
+          offers.map((offer) => (
+            <a href={offer.href}>
+              <span class="idx">{offer.index}</span>
+              <span class="name">{offer.name}</span>
+              <span class="sum">{offer.summary}</span>
+              <span class="cost">{priceLabel(offer)}</span>
+            </a>
+          ))
+        }
+      </div>
     </div>
+  </section>
 
-    <Statistics />
-    <Experience />
-    <Cta />
-  </Container>
-</Layout>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Ce que je fais</p>
+        <h2>Quatre offres, un seul interlocuteur.</h2>
+        <p>Pas de catalogue interminable. Un devis clair avant de commencer, et des prix annoncés comme des prix finaux.</p>
+      </div>
+      <div class="menu-list reveal">
+        {
+          offers.map((offer) => (
+            <a href={offer.href}>
+              <span class="idx">{offer.index}</span>
+              <h3>{offer.name}</h3>
+              <p class="sum">{offer.summary}</p>
+              <p class="cost">{priceLabel(offer)}</p>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Pourquoi travailler ensemble</p>
+        <h2>Direct, local, sans dépendance.</h2>
+      </div>
+      <div class="reasons reveal">
+        <article class="reason">
+          <h3>Un seul interlocuteur</h3>
+          <p>Du premier échange à la mise en ligne, vous parlez avec la personne qui fait le travail.</p>
+        </article>
+        <article class="reason">
+          <h3>Près d'Amiens</h3>
+          <p>Interventions dans la Somme, sur place quand c'est utile, et à distance le reste du temps.</p>
+        </article>
+        <article class="reason">
+          <h3>Vous gardez la main</h3>
+          <p>Le site et les outils vous appartiennent. Pas de dépendance artificielle à la fin du projet.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">Réalisations</p>
+        <h2>Quelques projets, pour se faire une idée.</h2>
+      </div>
+      <div class="project-grid home reveal">
+        {
+          projects.map((project) => (
+            <a class="project-card" href={`/projects/${project.id}`}>
+              <div class="frame">
+                <img
+                  src={project.data.image.src}
+                  alt={project.data.image.alt}
+                  width={project.data.image.width}
+                  height={project.data.image.height}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <p class="kicker">{project.data.category}</p>
+              <h3>{project.data.title}</h3>
+              <p>{project.data.snippet}</p>
+            </a>
+          ))
+        }
+      </div>
+      <div class="actions">
+        <a class="btn btn-line" href="/projets">Toutes les réalisations</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <p class="eyebrow">En bref</p>
+        <h2>Ce qui est déjà vrai.</h2>
+      </div>
+      <div class="facts reveal">
+        <article class="fact">
+          <h3>Proche</h3>
+          <p>Basé près d'Amiens. Rendez-vous sur place possible, travail à distance aussi.</p>
+        </article>
+        <article class="fact">
+          <h3>Professionnels</h3>
+          <p>TPE, artisans, professions libérales, associations et startups. Pas de particuliers.</p>
+        </article>
+        <article class="fact">
+          <h3>Prix nets</h3>
+          <p>TVA non applicable, art. 293 B du CGI. Le prix annoncé est le prix payé.</p>
+        </article>
+        <article class="fact">
+          <h3>Réponse</h3>
+          <p>Un retour sous {site.responseTime}, avec une estimation ou des questions.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!--
+    Témoignages
+    Masqué tant qu'aucun avis réel, avec accord écrit de son auteur, n'est disponible.
+    Ne pas publier de citation inventée.
+    <section class="section" aria-label="Témoignages">
+      <h2>Ils m'ont fait confiance</h2>
+      <blockquote>
+        <p>[Témoignage réel]</p>
+        <footer>[Prénom Nom], [fonction], [entreprise]</footer>
+      </blockquote>
+    </section>
+  -->
+
+  <Close />
+</Base>

@@ -1,0 +1,26 @@
+---
+import { site } from "@lib/site";
+
+interface Props {
+  href?: string;
+  title?: string;
+  text?: string;
+}
+const {
+  href = "/contact",
+  title = "Parlons de votre projet",
+  text = `Décrivez le besoin en quelques lignes. Je réponds sous ${site.responseTime}, avec une première estimation ou quelques questions.`,
+} = Astro.props;
+---
+
+<section class="close">
+  <div class="wrap">
+    <p class="eyebrow">Contact</p>
+    <h2>{title}</h2>
+    <p>{text}</p>
+    <div class="actions">
+      <a class="btn btn-lime" href={href}>Demander un devis gratuit</a>
+      <a class="btn btn-ghost" href={site.phoneHref}>Appeler le {site.phoneDisplay}</a>
+    </div>
+  </div>
+</section>

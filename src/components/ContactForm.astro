@@ -1,0 +1,149 @@
+---
+import { offerChoices, site, type OfferId } from "@lib/site";
+
+interface Props {
+  selected?: string;
+}
+
+const { selected = "" } = Astro.props;
+const current = offerChoices.some((choice) => choice.id === selected) ? (selected as OfferId) : "";
+---
+
+<form class="form" data-contact-form novalidate>
+  <div class="fields two">
+    <label class="field">
+      <span>Nom</span>
+      <input name="name" type="text" autocomplete="name" required maxlength="120" />
+    </label>
+    <label class="field">
+      <span>E-mail</span>
+      <input name="email" type="email" autocomplete="email" required maxlength="160" />
+    </label>
+    <label class="field">
+      <span>Téléphone <em class="optional">(facultatif)</em></span>
+      <input name="phone" type="tel" autocomplete="tel" maxlength="40" />
+    </label>
+    <label class="field">
+      <span>Entreprise <em class="optional">(facultatif)</em></span>
+      <input name="company" type="text" autocomplete="organization" maxlength="160" />
+    </label>
+  </div>
+  <label class="field">
+    <span>Offre</span>
+    <select name="offer" required>
+      <option value="" selected={current === ""}>Choisir une offre</option>
+      {
+        offerChoices.map((choice) => (
+          <option value={choice.id} selected={choice.id === current}>
+            {choice.label}
+          </option>
+        ))
+      }
+    </select>
+  </label>
+  <label class="field">
+    <span>Message</span>
+    <textarea name="message" required maxlength="5000" placeholder="Le contexte, le délai souhaité, ce qui existe déjà."></textarea>
+  </label>
+  <div class="hp" aria-hidden="true">
+    <label>
+      Ne pas remplir ce champ
+      <input name="nd_hp" type="text" tabindex="-1" autocomplete="off" />
+    </label>
+  </div>
+  <button class="btn btn-lime" type="submit">Envoyer</button>
+  <p class="form-status" data-status role="status" aria-live="polite"></p>
+  <p class="fine">
+    Les informations saisies servent uniquement à répondre à votre demande. Elles sont traitées par NeoDesign ({site.owner}) et conservées au maximum 3 ans après notre dernier échange.     Vous pouvez y accéder, les rectifier ou les faire supprimer en écrivant à <a href={`mailto:${site.email}`}>{site.email}</a>.{" "}
+    <a href="/politique-de-confidentialité">En savoir plus</a>.
+  </p>
+</form>
+
+<script>
+  import { buildContactPayload } from "../lib/contact-payload";
+  import { CONTACT_WEBHOOK_URL } from "../lib/webhook";
+
+  const successText = "Message envoyé. Je vous réponds sous 48 h ouvrées. Si c'est urgent, appelez-moi au 07 82 73 22 79.";
+  const offerIds = new Set(["site-vitrine", "maintenance", "automatisation", "conseil", "autre"]);
+
+  function preselectOffer() {
+    const select = document.querySelector("[data-contact-form] select[name='offer']");
+    if (!(select instanceof HTMLSelectElement)) return;
+    const offre = new URLSearchParams(window.location.search).get("offre") ?? "";
+    if (offerIds.has(offre)) select.value = offre;
+  }
+
+  preselectOffer();
+  document.addEventListener("astro:page-load", preselectOffer);
+
+  document.addEventListener(
+    "submit",
+    async (event) => {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement) || !form.hasAttribute("data-contact-form")) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (form.dataset.sending === "1") return;
+
+    const status = form.querySelector("[data-status]");
+    const button = form.querySelector("button[type='submit']");
+    if (!(status instanceof HTMLElement) || !(button instanceof HTMLButtonElement)) return;
+
+    const data = new FormData(form);
+    const result = buildContactPayload({
+      name: String(data.get("name") ?? ""),
+      email: String(data.get("email") ?? ""),
+      phone: String(data.get("phone") ?? ""),
+      company: String(data.get("company") ?? ""),
+      offer: String(data.get("offer") ?? ""),
+      message: String(data.get("message") ?? ""),
+      honeypot: String(data.get("nd_hp") ?? ""),
+    });
+
+    status.classList.remove("is-error", "is-ok");
+
+    if (!result.ok && result.spam) {
+      status.textContent = successText;
+      status.classList.add("is-ok");
+      form.reset();
+      return;
+    }
+
+    if (!result.ok) {
+      status.textContent = result.error;
+      status.classList.add("is-error");
+      return;
+    }
+
+    form.dataset.sending = "1";
+    button.disabled = true;
+    button.textContent = "Envoi…";
+
+    try {
+      const response = await fetch(CONTACT_WEBHOOK_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(result.payload),
+        mode: "cors",
+        credentials: "omit",
+      });
+      if (!response.ok) throw new Error(String(response.status));
+      status.textContent = successText;
+      status.classList.add("is-ok");
+      form.reset();
+    } catch {
+      status.classList.add("is-error");
+      status.innerHTML =
+        'L\'envoi n\'a pas abouti. Écrivez-moi à <a href="mailto:bonjour@agenceneodesign.com">bonjour@agenceneodesign.com</a> ou appelez le <a href="tel:+33782732279">07 82 73 22 79</a>.';
+    } finally {
+      form.dataset.sending = "0";
+      button.disabled = false;
+      button.textContent = "Envoyer";
+    }
+  },
+    true,
+  );
+</script>

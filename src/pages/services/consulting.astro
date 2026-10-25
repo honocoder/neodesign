@@ -1,0 +1,68 @@
+---
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import Close from "@components/Close.astro";
+import { getOffer, priceLabel } from "@lib/site";
+
+const offer = getOffer("conseil");
+---
+
+<Base
+  title="Conseil technique VPS, Docker, n8n, Notion à Amiens | NeoDesign"
+  description="Besoin d'un serveur, d'un n8n auto-hébergé ou d'un Notion bien organisé ? Conseil et mise en place à la demi-journée, pour TPE, associations et startups."
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Conseil technique",
+    serviceType: "Conseil technique",
+    provider: { "@type": "ProfessionalService", name: "NeoDesign" },
+    areaServed: "Amiens",
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        minPrice: "250",
+        priceCurrency: "EUR",
+      },
+      description: "À partir de 250 € la demi-journée. TVA non applicable, art. 293 B du CGI.",
+    },
+  }}
+>
+  <PageHero
+    eyebrow="04 · Conseil technique"
+    title="Les bons outils, bien installés."
+    lead="Vous payez plusieurs abonnements qui ne se parlent pas ? Le serveur a été installé par quelqu'un, et plus personne n'ose y toucher ? Vous voulez tester n8n ou l'IA sans vous perdre ? On remet ça à plat, puis on installe une solution simple et documentée."
+  >
+    <p class="lead">{priceLabel(offer)}. TVA non applicable, art. 293 B du CGI.</p>
+    <div class="actions">
+      <a class="btn btn-lime" href={offer.contact}>Réserver un échange</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <h2>Ce que je peux faire</h2>
+        <ul class="checklist">
+          <li>Serveur VPS et Docker : installation, sécurisation (pare-feu, mises à jour, sauvegardes), déploiement d'applications en conteneurs.</li>
+          <li>n8n auto-hébergé : installation sur votre serveur, premiers scénarios, prise en main.</li>
+          <li>Notion : organisation d'un espace (clients, projets, devis, notes).</li>
+          <li>Choix d'outils : regard sur vos abonnements et vos usages, avec des recommandations.</li>
+          <li>IA au quotidien : où elle fait gagner du temps, et où elle n'a rien à faire.</li>
+        </ul>
+      </div>
+      <div>
+        <h2>Comment ça se passe</h2>
+        <ol class="steps">
+          <li>Un appel de 30 minutes, gratuit, pour comprendre le besoin.</li>
+          <li>Une proposition écrite, au forfait ou en demi-journées.</li>
+          <li>L'intervention, à distance ou sur place (Amiens et alentours).</li>
+          <li>Une documentation simple à la fin, pour rester autonome.</li>
+        </ol>
+        <p class="note">Un audit d'outils peut être proposé au forfait. Son montant se décide au devis, il n'est pas affiché ici.</p>
+      </div>
+    </div>
+  </section>
+  <Close href={offer.contact} title="Réserver un échange" />
+</Base>

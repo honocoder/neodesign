@@ -1,29 +1,29 @@
 {
-  "name": "astroship",
+  "name": "neodesign",
   "type": "module",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
+    "preview": "astro preview --host",
+    "astro": "astro",
+    "test:contact": "node --experimental-strip-types scripts/contact-payload.test.ts"
   },
   "dependencies": {
-    "@astrojs/image": "^0.17.3",
-    "@astrojs/mdx": "^0.19.7",
-    "@astrojs/sitemap": "^2.0.2",
-    "@astrojs/tailwind": "^4.0.0",
-    "@astrojs/vercel": "^5.0.1",
-    "@fontsource-variable/inter": "^5.0.8",
-    "@tailwindcss/typography": "^0.5.10",
-    "@vercel/analytics": "^1.0.2",
-    "astro": "^2.10.15",
-    "astro-icon": "^0.8.1",
-    "astro-navbar": "^2.1.1",
-    "astro-seo": "^0.7.6",
-    "sharp": "^0.32.6",
-    "tailwindcss": "^3.3.3"
+    "@astrojs/sitemap": "^3.7.4",
+    "@astrojs/vercel": "^11.0.16",
+    "@fontsource-variable/fraunces": "^5.3.0",
+    "@fontsource-variable/source-sans-3": "^5.3.1",
+    "@tailwindcss/typography": "^0.5.20",
+    "@tailwindcss/vite": "^4.3.3",
+    "astro": "^7.4.2",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.12",
+    "sharp": "^0.35.5",
+    "typescript": "^5.9.3"
   }
 }
