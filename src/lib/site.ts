@@ -1,6 +1,6 @@
 export const site = {
   name: "NeoDesign",
-  tagline: "Développeur freelance près d'Amiens",
+  tagline: "Sites web et automatisation près d'Amiens",
   url: "https://www.agenceneodesign.com",
   email: "bonjour@agenceneodesign.com",
   phoneDisplay: "07 82 73 22 79",

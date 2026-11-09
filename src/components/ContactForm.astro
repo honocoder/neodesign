@@ -54,7 +54,7 @@ const current = offerChoices.some((choice) => choice.id === selected) ? (selecte
   <button class="btn btn-lime" type="submit">Envoyer</button>
   <p class="form-status" data-status role="status" aria-live="polite"></p>
   <p class="fine">
-    Les informations saisies servent uniquement à répondre à votre demande. Elles sont traitées par NeoDesign ({site.owner}) et conservées au maximum 3 ans après notre dernier échange.     Vous pouvez y accéder, les rectifier ou les faire supprimer en écrivant à <a href={`mailto:${site.email}`}>{site.email}</a>.{" "}
+    Les informations saisies servent uniquement à répondre à votre demande. Elles sont traitées par NeoDesign (voir les <a href="/mentions-legales">mentions légales</a>) et conservées au maximum 3 ans après notre dernier échange. Vous pouvez y accéder, les rectifier ou les faire supprimer en écrivant à <a href={`mailto:${site.email}`}>{site.email}</a>.{" "}
     <a href="/politique-de-confidentialité">En savoir plus</a>.
   </p>
 </form>
@@ -62,7 +62,7 @@ const current = offerChoices.some((choice) => choice.id === selected) ? (selecte
 <script>
   import { buildContactPayload } from "../lib/contact-payload";
 
-  const successText = "Message envoyé. Je vous réponds sous 48 h ouvrées. Si c'est urgent, appelez-moi au 07 82 73 22 79.";
+  const successText = "Message envoyé. On vous répond sous 48 h ouvrées. Si c'est urgent, appelez-nous au 07 82 73 22 79.";
   const offerIds = new Set(["site-vitrine", "maintenance", "automatisation", "conseil", "autre"]);
 
   function preselectOffer() {
@@ -145,7 +145,7 @@ const current = offerChoices.some((choice) => choice.id === selected) ? (selecte
         status.textContent =
           payload && typeof payload.error === "string" && payload.error
             ? payload.error
-            : "L'envoi n'a pas abouti. Écrivez-moi à bonjour@agenceneodesign.com ou appelez le 07 82 73 22 79.";
+            : "L'envoi n'a pas abouti. Écrivez-nous à bonjour@agenceneodesign.com ou appelez le 07 82 73 22 79.";
         return;
       }
       status.textContent = successText;
@@ -154,7 +154,7 @@ const current = offerChoices.some((choice) => choice.id === selected) ? (selecte
     } catch {
       status.classList.add("is-error");
       status.textContent =
-        "L'envoi n'a pas abouti. Écrivez-moi à bonjour@agenceneodesign.com ou appelez le 07 82 73 22 79.";
+        "L'envoi n'a pas abouti. Écrivez-nous à bonjour@agenceneodesign.com ou appelez le 07 82 73 22 79.";
     } finally {
       form.dataset.sending = "0";
       button.disabled = false;

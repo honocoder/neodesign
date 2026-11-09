@@ -40,10 +40,6 @@ const business = {
     { "@type": "City", name: "Amiens" },
     { "@type": "AdministrativeArea", name: "Somme" },
   ],
-  founder: {
-    "@type": "Person",
-    name: site.owner,
-  },
 };
 
 const structured = [business, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];
