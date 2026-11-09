@@ -1,0 +1,152 @@
+---
+import Base from "@layouts/Base.astro";
+import PageHero from "@components/PageHero.astro";
+import ServiceSections from "@components/ServiceSections.astro";
+import Close from "@components/Close.astro";
+
+const cta = {
+  href: "/contact?offre=automatisation&demande=appel-decouverte",
+  label: "Réserver un appel découverte de 20 min (gratuit)",
+};
+const tiers = [
+  {
+    name: "Diagnostic Gain de temps",
+    price: "290\u202f€",
+    unit: "prix fixe, une demi-journée",
+    points: [
+      "2 h avec vous, sur place ou en visio, puis une restitution",
+      "Les 3 tâches répétitives qui vous coûtent le plus de temps",
+      "Pour chacune, une estimation des heures récupérées par mois",
+      "Une solution avec vos outils actuels, chiffrée et classée par priorité",
+      "Un document de 3 à 4 pages, à garder",
+      "Déduit à 100 % de la mise en place si vous la signez dans les 30 jours",
+    ],
+  },
+  {
+    name: "Mise en place",
+    price: "500 à 1\u202f500\u202f€",
+    unit: "par automatisation",
+    points: [
+      "Un prix ferme, donné après le diagnostic",
+      "Installation dans vos outils actuels",
+      "Tests sur vos vrais cas",
+      "Une notice simple et une prise en main",
+      "Les abonnements aux outils sont à votre nom : vous en gardez la maîtrise",
+    ],
+  },
+  {
+    name: "Suivi (en option)",
+    price: "40 à 80\u202f€",
+    unit: "par mois",
+    points: [
+      "Surveillance et maintenance",
+      "Petits ajustements quand votre façon de travailler change",
+      "1 h d'accompagnement par mois",
+    ],
+  },
+];
+---
+
+<Base
+  title="IA pour les TPE : diagnostic Gain de temps à 290 € | NeoDesign"
+  description="Moins d'administratif, plus de temps pour vos clients. Un diagnostic d'une demi-journée à 290 € pour repérer ce qui peut s'automatiser, près d'Amiens. Réservé aux professionnels."
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: "Diagnostic Gain de temps",
+    serviceType: "Automatisation et IA pour les TPE",
+    provider: { "@type": "ProfessionalService", name: "NeoDesign" },
+    areaServed: "Amiens",
+    audience: { "@type": "BusinessAudience" },
+    offers: {
+      "@type": "Offer",
+      price: "290",
+      priceCurrency: "EUR",
+      description: "Diagnostic d'une demi-journée, prix fixe. TVA non applicable, art. 293 B du CGI.",
+    },
+  }}
+>
+  <PageHero
+    eyebrow="IA pour les TPE · Amiens et à distance"
+    title="Moins d'administratif, plus de temps pour vos clients."
+    lead="On automatise vos tâches répétitives avec l'IA, sans changer vos outils. Diagnostic d'une demi-journée : 290 €."
+  >
+    <div class="actions">
+      <a class="btn btn-lime" href={cta.href}>{cta.label}</a>
+    </div>
+    <p class="note">TVA non applicable, art. 293 B du CGI. Offre réservée aux professionnels.</p>
+  </PageHero>
+
+  <section class="section section--ia-tpe-intro">
+    <div class="wrap section-head">
+      <p class="eyebrow">Concrètement</p>
+      <h2>Trois tâches qui peuvent presque se faire toutes seules.</h2>
+    </div>
+  </section>
+  <ServiceSections
+    glance={[
+      { title: "Demandes entrantes triées, réponses préparées", text: "Les e-mails et les demandes reçues par votre formulaire sont classés par type. Un brouillon de réponse vous attend : vous relisez, vous envoyez." },
+      { title: "Devis et relances qui ne s'oublient plus", text: "Le devis est pré-rempli à partir de la demande. Le client qui n'a pas répondu est relancé au bon moment, sans que vous ayez à y penser." },
+      { title: "Documents qui se rangent tout seuls", text: "Factures, attestations et pièces de dossier sont lues, renommées et classées au bon endroit : votre logiciel, votre dossier partagé ou votre comptable." },
+    ]}
+    steps={[
+      { title: "Appel découverte, 20 min", text: "Gratuit et sans engagement. Vous décrivez votre quotidien, on voit ensemble si un diagnostic vaut le coup." },
+      { title: "Diagnostic, une demi-journée", text: "On repère vos tâches répétitives et on chiffre ce qui peut être automatisé." },
+      { title: "Mise en place", text: "Si vous le décidez, on installe les automatisations retenues, on les teste avec vous et on vous explique comment elles marchent." },
+    ]}
+  >
+    <div class="tier-block tier-block--ia-tpe">
+      <p class="eyebrow">L'offre</p>
+      <h2>Commencer petit, payer un prix connu.</h2>
+      <div class="tier-grid">
+        {tiers.map((tier) => (
+          <article class="tier">
+            <h3>{tier.name}</h3>
+            <p class="price-figure">{tier.price} <span class="price-unit">{tier.unit}</span></p>
+            <ul class="checklist">
+              {tier.points.map((point) => <li>{point}</li>)}
+            </ul>
+          </article>
+        ))}
+      </div>
+      <p class="note">Prix finaux. TVA non applicable, art. 293 B du CGI.</p>
+    </div>
+    <article class="plain-card">
+      <h2>Vous gardez la main</h2>
+      <p>Vos données restent dans vos comptes. Rien n'est automatisé sans votre validation. L'objectif n'est pas de remplacer qui que ce soit : c'est de vous rendre des heures sur les tâches répétitives.</p>
+    </article>
+  </ServiceSections>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="wrap plain-card">
+      <h2>Pour qui ?</h2>
+      <p>TPE, PME, indépendants et professions libérales, à Amiens, dans la Somme ou à distance : agences immobilières, courtiers, entreprises du bâtiment, transporteurs, organismes de formation… Offre réservée aux professionnels.</p>
+    </div>
+  </section>
+  <Close
+    href={cta.href}
+    label={cta.label}
+    showPhone={false}
+    title="Vingt minutes pour voir si ça vaut le coup."
+    text="Un appel découverte gratuit, sans engagement. Si l'automatisation ne vous fait pas gagner de temps, on vous le dit."
+  />
+</Base>
+
+<style>
+  .section--ia-tpe-intro {
+    padding-bottom: 0;
+  }
+
+  .tier-block--ia-tpe .price-figure {
+    font-size: clamp(1.8rem, 2.5vw, 2rem);
+    white-space: nowrap;
+  }
+
+  .tier-block--ia-tpe .price-unit {
+    display: block;
+    margin: 0.4rem 0 0;
+    font-size: 1rem;
+    line-height: 1.4;
+    white-space: normal;
+  }
+</style>

@@ -72,6 +72,17 @@ const current = offerChoices.some((choice) => choice.id === selected) ? (selecte
     if (offerIds.has(offre)) select.value = offre;
   }
 
+  function prefillDiscoveryMessage() {
+    if (new URLSearchParams(window.location.search).get("demande") !== "appel-decouverte") return;
+    const message = document.querySelector("[data-contact-form] textarea[name='message']");
+    if (message instanceof HTMLTextAreaElement && message.value === "") {
+      message.value = "Bonjour, je souhaite réserver l'appel découverte de 20 minutes (diagnostic Gain de temps). Mes disponibilités : ";
+    }
+  }
+
+  prefillDiscoveryMessage();
+  document.addEventListener("astro:page-load", prefillDiscoveryMessage);
+
   preselectOffer();
   document.addEventListener("astro:page-load", preselectOffer);
 

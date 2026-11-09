@@ -50,7 +50,7 @@ export const offers = [
     unit: "",
     cadence: "",
     summary:
-      "Formulaires, devis, relances et réservations s'enchaînent avec n8n, et l'IA seulement là où elle fait gagner du temps.",
+      "Demandes, devis, relances et documents qui se traitent presque tout seuls, avec l'IA là où elle fait gagner du temps.",
   },
   {
     id: "conseil",
@@ -152,8 +152,18 @@ export const mobileService = {
   summary: "Une application pour le téléphone, quand le site ne suffit plus. Le périmètre se décide au devis.",
 } as const;
 
+export const iaTpe = {
+  href: "/ia-tpe",
+  name: "IA pour les TPE",
+  summary: "Diagnostic Gain de temps : une demi-journée pour repérer ce qui peut s'automatiser chez vous.",
+  price: "290\u202f€",
+} as const;
+
 export const serviceLinks = [
-  ...offers.map((offer) => ({ href: offer.href, label: offer.name })),
+  ...offers.flatMap((offer) => [
+    { href: offer.href, label: offer.name },
+    ...(offer.id === "automatisation" ? [{ href: iaTpe.href, label: iaTpe.name }] : []),
+  ]),
   { href: mobileService.href, label: mobileService.name },
 ] as const;
 

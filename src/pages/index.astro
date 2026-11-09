@@ -2,14 +2,16 @@
 import Base from "@layouts/Base.astro";
 import Close from "@components/Close.astro";
 import { getCollection } from "astro:content";
-import { mobileService, offers, priceLabel, site } from "@lib/site";
+import { iaTpe, mobileService, offers, priceLabel, site } from "@lib/site";
 
 const projects = (await getCollection("projects"))
   .filter((project) => project.data.featured)
   .sort((a, b) => a.data.order - b.data.order);
 
+const offerHref = (offer: (typeof offers)[number]) => offer.id === "automatisation" ? iaTpe.href : offer.href;
+
 const description =
-  "Sites web, maintenance, automatisations n8n, conseil technique et applications mobiles pour les professionnels, près d'Amiens.";
+  "Sites web, maintenance, automatisation et IA, conseil technique et applications mobiles pour les professionnels, près d'Amiens.";
 ---
 
 <Base
@@ -41,7 +43,7 @@ const description =
       <div class="offer-index" aria-label="Quatre offres">
         {
           offers.map((offer) => (
-            <a href={offer.href}>
+            <a href={offerHref(offer)}>
               <span class="idx">{offer.index}</span>
               <span class="name">{offer.name}</span>
               <span class="sum">{offer.summary}</span>
@@ -63,7 +65,7 @@ const description =
       <div class="menu-list reveal">
         {
           offers.map((offer) => (
-            <a href={offer.href}>
+            <a href={offerHref(offer)}>
               <span class="idx">{offer.index}</span>
               <h3>{offer.name}</h3>
               <p class="sum">{offer.summary}</p>
@@ -72,6 +74,17 @@ const description =
           ))
         }
       </div>
+    </div>
+  </section>
+
+  <section class="section" style="padding-top: 0;">
+    <div class="wrap">
+      <a class="plain-card mobile-banner" href={iaTpe.href}>
+        <p class="eyebrow">Nouveau · IA pour les TPE</p>
+        <h2>Moins d'administratif, plus de temps pour vos clients.</h2>
+        <p>Diagnostic Gain de temps : une demi-journée pour repérer ce qui peut s'automatiser chez vous. 290 €, déduits de la mise en place si vous la signez dans les 30 jours.</p>
+        <p class="cost">290 € · TVA non applicable, art. 293 B du CGI</p>
+      </a>
     </div>
   </section>
 
