@@ -2,26 +2,26 @@
 import Base from "@layouts/Base.astro";
 import PageHero from "@components/PageHero.astro";
 import Close from "@components/Close.astro";
-import { offers, site, tools } from "@lib/site";
+import { iaTpe, offers, site, tools } from "@lib/site";
 ---
 
 <Base
-  title="À propos – Jimy Marletta, développeur freelance à Amiens | NeoDesign"
-  description="Jimy Marletta, développeur freelance près d'Amiens. Développement de site, maintenance, automatisation n8n, conseil technique et applications mobiles."
+  title="À propos de NeoDesign : sites web et automatisation près d'Amiens | NeoDesign"
+  description="NeoDesign, studio web près d'Amiens : sites, maintenance, automatisation et IA, conseil technique et applications mobiles, pour les professionnels."
 >
   <PageHero
     eyebrow="À propos"
-    title="Un développeur, un interlocuteur."
-    lead="Je m'appelle Jimy Marletta. Je suis développeur freelance, près d'Amiens, dans la Somme. Le développement de site, la maintenance, l'automatisation et les applications mobiles passent par moi."
+    title="Un studio web, un seul interlocuteur."
+    lead="NeoDesign est un studio web basé près d'Amiens, dans la Somme. Sites, maintenance, automatisation et applications mobiles : on s'occupe de tout, de la première discussion à la mise en ligne, avec un seul interlocuteur."
   />
 
   <section class="section">
     <div class="wrap split">
       <div class="reveal">
-        <p class="eyebrow">Ce que je fais pour vous</p>
+        <p class="eyebrow">Ce que l'on fait pour vous</p>
         <h2>Des solutions qui tiennent dans le temps.</h2>
         <p class="note">
-          Je travaille exclusivement avec des professionnels : TPE, artisans, professions libérales, associations et startups.
+          NeoDesign travaille exclusivement avec des professionnels : TPE, artisans, professions libérales, associations et startups, à Amiens, dans la Somme ou à distance.
         </p>
       </div>
       <ul class="steps reveal">
@@ -33,6 +33,10 @@ import { offers, site, tools } from "@lib/site";
             </li>
           ))
         }
+        <li>
+          <a href={iaTpe.href}><strong>{iaTpe.name}</strong></a>
+          <span>{iaTpe.summary}</span>
+        </li>
       </ul>
     </div>
   </section>
@@ -52,7 +56,7 @@ import { offers, site, tools } from "@lib/site";
       <div class="reveal">
         <p class="eyebrow">Outils</p>
         <h2>La boîte à outils.</h2>
-        <p>Ceux que j'utilise vraiment, selon le projet.</p>
+        <p>Ceux que l'on utilise vraiment, selon le projet.</p>
         <ul class="tools">
           {tools.map((tool) => <li>{tool}</li>)}
         </ul>

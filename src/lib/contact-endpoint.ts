@@ -81,7 +81,7 @@ function reply(html: boolean, status: number, body: JsonBody, extra?: Record<str
 
   const title = body.ok ? "Message envoyé" : "Envoi impossible";
   const text = body.ok
-    ? `Message envoyé. Je vous réponds sous ${site.responseTime}. Si c'est urgent, appelez-moi au ${site.phoneDisplay}.`
+    ? `Message envoyé. On vous répond sous ${site.responseTime}. Si c'est urgent, appelez-nous au ${site.phoneDisplay}.`
     : body.error;
   headers["content-type"] = "text/html; charset=utf-8";
   return new Response(

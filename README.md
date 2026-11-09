@@ -1,6 +1,6 @@
 # NeoDesign
 
-Site vitrine de Jimy Marletta, développeur web freelance près d'Amiens.  
+Site vitrine de NeoDesign, studio web près d'Amiens.
 Astro, pages statiques, français. Le formulaire de contact passe par une fonction serveur.
 
 ```bash

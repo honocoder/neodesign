@@ -1,5 +1,5 @@
 ---
-import { mobileService, offers, site } from "@lib/site";
+import { iaTpe, mobileService, offers, site } from "@lib/site";
 ---
 
 <footer class="footer">
@@ -22,7 +22,10 @@ import { mobileService, offers, site } from "@lib/site";
       <h2>Offres</h2>
       <ul>
         {offers.map((offer) => (
+          <>
           <li><a href={offer.href}>{offer.name}</a></li>
+          {offer.id === "automatisation" && <li><a href={iaTpe.href}>{iaTpe.name}</a></li>}
+          </>
         ))}
         <li><a href={mobileService.href}>{mobileService.name}</a></li>
       </ul>

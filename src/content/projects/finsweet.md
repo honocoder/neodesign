@@ -21,4 +21,4 @@ tags:
 
 ## Ce qui a été fait
 
-J'ai participé au développement d'Attributes, en TypeScript. J'ai aussi travaillé sur un site réalisé par Finsweet pour un de ses clients, pour y implémenter certaines bibliothèques.
+NeoDesign a participé au développement d'Attributes, en TypeScript, et a travaillé sur un site réalisé par Finsweet pour un de ses clients, pour y implémenter certaines bibliothèques.
