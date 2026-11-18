@@ -8,6 +8,7 @@ import {
   maintenanceTiers,
   offers,
   priceLabel,
+  pricingDescription,
   vitrineIncludes,
   vitrineOptions,
 } from "@lib/site";
@@ -20,7 +21,7 @@ const conseil = getOffer("conseil");
 
 <Base
   title="Tarifs | NeoDesign"
-  description="Sites web à partir de 1 200 €. Maintenance à partir de 60 € par mois : Essentiel 60 €, Sérénité 120 €, Pro 240 €. Automatisation à partir de 500 €, conseil à partir de 250 € la demi-journée. Prix finaux, TVA non applicable."
+  description={pricingDescription}
 >
   <PageHero
     eyebrow="Tarifs"

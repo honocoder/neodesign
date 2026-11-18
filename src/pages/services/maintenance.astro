@@ -3,14 +3,21 @@ import Base from "@layouts/Base.astro";
 import PageHero from "@components/PageHero.astro";
 import Close from "@components/Close.astro";
 import ServiceSections from "@components/ServiceSections.astro";
-import { getOffer, maintenanceNotes, maintenanceTiers, priceLabel } from "@lib/site";
+import {
+  getOffer,
+  maintenanceDescription,
+  maintenanceNotes,
+  maintenanceStructuredOffer,
+  maintenanceTiers,
+  priceLabel,
+} from "@lib/site";
 
 const offer = getOffer("maintenance");
 ---
 
 <Base
   title="Maintenance et sécurité de site | NeoDesign"
-  description="Trois forfaits de maintenance : Essentiel 60 €, Sérénité 120 €, Pro 240 € par mois. Mises à jour, sécurité, surveillance et sauvegardes. Prix finaux, TVA non applicable."
+  description={maintenanceDescription}
   jsonLd={{
     "@context": "https://schema.org",
     "@type": "Service",
@@ -18,24 +25,13 @@ const offer = getOffer("maintenance");
     serviceType: "Maintenance de site web",
     provider: { "@type": "ProfessionalService", name: "NeoDesign" },
     areaServed: "Amiens",
-    offers: {
-      "@type": "Offer",
-      priceCurrency: "EUR",
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        minPrice: "60",
-        priceCurrency: "EUR",
-        unitText: "mois",
-      },
-      description:
-        "À partir de 60 € par mois. Essentiel 60 €, Sérénité 120 €, Pro 240 €. Prix finaux, TVA non applicable, art. 293 B du CGI.",
-    },
+    offers: maintenanceStructuredOffer,
   }}
 >
   <PageHero
     eyebrow="02 · Maintenance"
     title="Le site reste à jour, sans y penser."
-    lead="Mises à jour, sécurité, surveillance de disponibilité et sauvegardes. Sérénité et Pro ajoutent du temps de modification, avec une prise en charge plus courte."
+    lead="On s'occupe des mises à jour, de la sécurité, de la surveillance et des sauvegardes. Chaque forfait inclut des heures de modification."
   >
     <p class="lead">{priceLabel(offer)}. TVA non applicable, art. 293 B du CGI.</p>
     <div class="actions">
@@ -46,14 +42,14 @@ const offer = getOffer("maintenance");
 
   <ServiceSections
     glance={[
-      { title: "À jour", text: "Mises à jour et sécurité, sans que vous ayez à les lancer." },
-      { title: "Sauvé", text: "Sauvegardes hebdomadaires, quotidiennes avec le forfait Pro." },
-      { title: "Pris en charge", text: "Sous 72 h, 48 h ou 24 h ouvrées, selon le forfait." },
+      { title: "À jour", text: "On met à jour le CMS, les extensions et les thèmes, et on surveille la disponibilité du site." },
+      { title: "Sauvé", text: "On sauvegarde le site et sa base de données chaque semaine avec Essentiel et Sérénité, chaque jour avec Pro." },
+      { title: "Pris en charge", text: "Sous 72 h ouvrées avec Essentiel, 48 h avec Sérénité et 24 h en priorité avec Pro." },
     ]}
     steps={[
       { title: "Le site actuel", text: "On regarde ce qui est en place, et ce qui doit être surveillé." },
       { title: "Le forfait", text: "Essentiel, Sérénité ou Pro. Les heures de modification ne se cumulent pas d'un mois sur l'autre." },
-      { title: "Chaque mois", text: "Les mises à jour, la sécurité et les sauvegardes, plus les heures prévues s'il y en a." },
+      { title: "Chaque mois", text: "On assure les mises à jour, la sécurité, la surveillance et les sauvegardes. Vous pouvez utiliser les heures de modification prévues dans votre forfait." },
     ]}
   >
     <div class="tier-block">
