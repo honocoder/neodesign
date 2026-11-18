@@ -15,6 +15,68 @@ export const site = {
   owner: "Jimy Marletta",
 } as const;
 
+const maintenanceCommonPoints = [
+  "Mises à jour du CMS, des extensions et des thèmes",
+  "Sécurité",
+  "Surveillance de la disponibilité du site",
+] as const;
+
+const weeklyBackups = "Sauvegardes hebdomadaires du site et de la base de données";
+
+const maintenancePlans = [
+  {
+    name: "Essentiel",
+    monthlyPrice: 70,
+    points: [
+      ...maintenanceCommonPoints,
+      "1 h de modifications par mois",
+      weeklyBackups,
+      "Prise en charge sous 72 h ouvrées",
+    ],
+  },
+  {
+    name: "Sérénité",
+    monthlyPrice: 120,
+    points: [
+      ...maintenanceCommonPoints,
+      "2 h de modifications par mois",
+      weeklyBackups,
+      "Prise en charge sous 48 h ouvrées",
+      "Petit bilan mensuel",
+    ],
+  },
+  {
+    name: "Pro",
+    monthlyPrice: 240,
+    points: [
+      ...maintenanceCommonPoints,
+      "4 h de modifications par mois sur le site ou les automatisations",
+      "Sauvegardes quotidiennes du site et de la base de données",
+      "Prise en charge prioritaire sous 24 h ouvrées",
+      "Bilan mensuel",
+      "Point trimestriel de 30 min",
+      "Suivi de la fiche Google Business Profile (horaires, infos, photos)",
+    ],
+  },
+] as const;
+
+export const maintenanceTiers = maintenancePlans.map(({ name, monthlyPrice, points }) => ({
+  name,
+  price: `${monthlyPrice}\u202f€`,
+  unit: "/mois",
+  points,
+}));
+
+export const maintenanceNotes = [
+  "Temps supplémentaire hors forfait à 70\u202f€/h.",
+  "Les heures non utilisées ne se reportent pas d'un mois sur l'autre.",
+  "Engagement minimum de 3 mois.",
+  "Pour un site non réalisé par NeoDesign, audit de reprise à 150\u202f€ avant souscription.",
+  "Google Ads est hors forfait. La conception et la gestion sont sur devis, et vous payez directement le budget publicitaire.",
+] as const;
+
+const maintenancePrices = maintenanceTiers.map(({ name, price }) => `${name} ${price}`).join(", ");
+
 export const offers = [
   {
     id: "site-vitrine",
@@ -34,11 +96,10 @@ export const offers = [
     name: "Maintenance et sécurité",
     href: "/services/maintenance",
     contact: "/contact?offre=maintenance",
-    from: "60\u202f€",
-    unit: "/mois",
+    from: maintenanceTiers[0].price,
+    unit: maintenanceTiers[0].unit,
     cadence: "",
-    summary:
-      "Essentiel 60 €, Sérénité 120 €, Pro 240 € par mois. Mises à jour, sécurité, surveillance et sauvegardes.",
+    summary: `${maintenancePrices} par mois. Mises à jour, sécurité, surveillance et sauvegardes.`,
   },
   {
     id: "automatisation",
@@ -101,51 +162,6 @@ export const vitrineOptions = [
   "Référencement plus poussé",
 ];
 
-export const maintenanceTiers = [
-  {
-    name: "Essentiel",
-    price: "60\u202f€",
-    unit: "/mois",
-    points: [
-      "Mises à jour",
-      "Sécurité",
-      "Surveillance de disponibilité",
-      "Sauvegardes hebdomadaires",
-      "Pas de temps de modification inclus",
-      "Prise en charge sous 72 h ouvrées",
-    ],
-  },
-  {
-    name: "Sérénité",
-    price: "120\u202f€",
-    unit: "/mois",
-    points: [
-      "Tout l'Essentiel",
-      "1 h de modifications par mois, non cumulable",
-      "Petit bilan mensuel",
-      "Prise en charge sous 48 h ouvrées",
-    ],
-  },
-  {
-    name: "Pro",
-    price: "240\u202f€",
-    unit: "/mois",
-    points: [
-      "Tout l'Essentiel",
-      "Sauvegardes quotidiennes",
-      "3 h par mois, non cumulables, sur le site ou les automatisations",
-      "Prise en charge prioritaire sous 24 h ouvrées",
-      "Point trimestriel de 30 min",
-    ],
-  },
-] as const;
-
-export const maintenanceNotes = [
-  "Temps supplémentaire hors forfait : 70\u202f€/h.",
-  "Engagement minimum de 3 mois.",
-  "Pour un site non réalisé par NeoDesign, audit de reprise à 150\u202f€ avant souscription.",
-] as const;
-
 export const mobileService = {
   href: "/services/applications-mobiles",
   name: "Applications mobiles",
@@ -189,3 +205,25 @@ export function priceLabel(offer: (typeof offers)[number]) {
   const cadence = offer.cadence ? ` ${offer.cadence}` : "";
   return `à partir de ${offer.from}${offer.unit}${cadence}`;
 }
+
+const maintenanceOffer = getOffer("maintenance");
+const maintenanceStartingPrice = `à partir de ${maintenanceOffer.from} par mois`;
+
+export const pricingDescription =
+  `Sites web ${priceLabel(getOffer("site-vitrine"))}. Maintenance ${maintenanceStartingPrice} : ${maintenancePrices}. ` +
+  `Automatisation ${priceLabel(getOffer("automatisation"))}, conseil ${priceLabel(getOffer("conseil"))}. ` +
+  "Prix finaux, TVA non applicable.";
+
+export const maintenanceDescription = `Trois forfaits de maintenance. ${maintenanceOffer.summary} Prix finaux, TVA non applicable.`;
+
+export const maintenanceStructuredOffer = {
+  "@type": "Offer",
+  priceCurrency: "EUR",
+  priceSpecification: {
+    "@type": "PriceSpecification",
+    minPrice: maintenancePlans[0].monthlyPrice,
+    priceCurrency: "EUR",
+    unitText: "mois",
+  },
+  description: `Maintenance ${maintenanceStartingPrice}. ${maintenanceOffer.summary} Prix finaux. TVA non applicable, art. 293 B du CGI.`,
+} as const;
